@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css"/>
+    <title>Data Selection - Animated Easter Card</title>
+</head>
+<body>
+    <header>
+        <h1>Personalised easter card</h1>
+    </header>
+    <main>
+        <h2>Please confirm the relevant data and personalise your card</h2>
+        <form action="preview.html" method="get">
+            <label for="emailColumn">Email column</label>
+            <select id="emailColumn" name="emailColumn">
+                <option value="">Select a column...</option>
+                <!-- Options populated from uploaded data -->
+            </select>
+
+            <label for="nameColumn">Customer name column (optional)</label>
+            <select id="nameColumn" name="nameColumn">
+                <option value="">None</option>
+                <!-- Options populated from uploaded data -->
+            </select>
+
+            <label for="openingPhrase">Opening phrase</label>
+            <select id="openingPhrase" name="openingPhrase">
+                <option value="happy-easter">Happy Easter!</option>
+                <option value="wishing-you">Wishing you a joyful Easter!</option>
+                <option value="warmest">Our warmest Easter greetings to you</option>
+                <option value="hi-name">Happy Easter, {customer name}!</option>
+                <option value="dear-name">Dear {customer name},</option>
+                <option value="from-company">From all of us at {company name},</option>
+                <option value="dear-name-from-company">Dear {customer name}, from all of us at {company name}</option>
+            </select>
+
+            <div class="buttons">
+                <p class="help">You will be shown a preview before the cards are sent.</p>
+                <button type="button" class="back" onclick="history.back()">Back</button>
+                <button type="submit" class="next">Next</button>
+            </div>
+        </form>
+    </main>
+    <footer>
+        <small>This is a portfolio project for Edge Hill University Web Portfolio module</small>
+    </footer>
+</body>
+</html>
