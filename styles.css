@@ -48,11 +48,15 @@
 body {
     background-color: var(--colour-bg);
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 main {
     width: 60vw;
-    margin: auto;
+    margin: 0 auto;
+    flex: 1;
 }
 
 footer {
@@ -137,9 +141,16 @@ input[type="file"]::file-selector-button {
 
 .buttons {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--space-l);
     justify-content: flex-end;
     margin: var(--space-l) 0;
+}
+
+.buttons .help {
+    width: 100%;
+    text-align: right;
+    margin: 0;
 }
 
 .buttons .next {
@@ -160,7 +171,8 @@ button[type="submit"] {
     background-color: var(--colour-confirm);
 }
 
-button[type="reset"] {
+button[type="reset"],
+button[type="button"] {
     background-color: var(--colour-cancel);
 }
 
@@ -170,10 +182,38 @@ button[type="submit"]:hover {
     cursor: pointer;
 }
 
-button[type="reset"]:hover {
+button[type="reset"]:hover,
+button[type="button"]:hover {
     background-color: var(--colour-cancel-hover);
     color: var(--colour-hover-text);
     cursor: pointer;
+}
+
+.card-preview {
+    background-color: var(--colour-preview-bg);
+    border-radius: var(--border-radius-input);
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-m);
+    margin: var(--space-l) auto;
+}
+
+.card-preview__phrase {
+    font-size: var(--font-size-form-label);
+    font-weight: var(--font-weight-semibold);
+    text-align: center;
+    padding: var(--space-m);
+}
+
+.card-preview__image {
+    width: 200px;
+    height: 200px;
+    background-color: var(--colour-input);
+    border-radius: var(--border-radius-input);
 }
 
 input[type="file"]::file-selector-button:hover {
