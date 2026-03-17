@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css"/>
+    <link rel="stylesheet" href="card.css"/>
     <title>Happy Easter!</title>
 </head>
 <body>
@@ -12,6 +13,160 @@
     </header>
     <main>
         <section id="card-stage" aria-label="Animated Easter card">
+            <div class="scene" aria-hidden="true">
+
+                <!-- Background: sky, sun, clouds, ground -->
+                <div class="sky"></div>
+                <div class="sun"></div>
+                <div class="cloud cloud--1"></div>
+                <div class="cloud cloud--2"></div>
+                <div class="ground"></div>
+
+                <!-- Grass tufts (20 × 3 blades each, always swaying) -->
+                <div class="grass grass--1"><span></span><span></span><span></span></div>
+                <div class="grass grass--2"><span></span><span></span><span></span></div>
+                <div class="grass grass--3"><span></span><span></span><span></span></div>
+                <div class="grass grass--4"><span></span><span></span><span></span></div>
+                <div class="grass grass--5"><span></span><span></span><span></span></div>
+                <div class="grass grass--6"><span></span><span></span><span></span></div>
+                <div class="grass grass--7"><span></span><span></span><span></span></div>
+                <div class="grass grass--8"><span></span><span></span><span></span></div>
+                <div class="grass grass--9"><span></span><span></span><span></span></div>
+                <div class="grass grass--10"><span></span><span></span><span></span></div>
+                <div class="grass grass--11"><span></span><span></span><span></span></div>
+                <div class="grass grass--12"><span></span><span></span><span></span></div>
+                <div class="grass grass--13"><span></span><span></span><span></span></div>
+                <div class="grass grass--14"><span></span><span></span><span></span></div>
+                <div class="grass grass--15"><span></span><span></span><span></span></div>
+                <div class="grass grass--16"><span></span><span></span><span></span></div>
+                <div class="grass grass--17"><span></span><span></span><span></span></div>
+                <div class="grass grass--18"><span></span><span></span><span></span></div>
+                <div class="grass grass--19"><span></span><span></span><span></span></div>
+                <div class="grass grass--20"><span></span><span></span><span></span></div>
+
+                <!-- Egg: rolls in (0s–6s), shakes and cracks (6s–9s), explodes (9s–10s) -->
+                <div class="egg-scene">
+                    <div class="egg">
+                        <div class="egg__stripe"></div>
+                        <div class="egg__dot egg__dot--1"></div>
+                        <div class="egg__dot egg__dot--2"></div>
+                        <div class="egg__dot egg__dot--3"></div>
+                        <div class="egg__crack egg__crack--1"></div>
+                        <div class="egg__crack egg__crack--2"></div>
+                        <div class="egg__crack egg__crack--3"></div>
+                        <div class="egg__crack egg__crack--4"></div>
+                    </div>
+                    <div class="egg-flash"></div>
+                </div>
+
+                <!-- Confetti: 20 pieces burst outward at 9.1s+ -->
+                <div class="confetti confetti--1"></div>
+                <div class="confetti confetti--2"></div>
+                <div class="confetti confetti--3"></div>
+                <div class="confetti confetti--4"></div>
+                <div class="confetti confetti--5"></div>
+                <div class="confetti confetti--6"></div>
+                <div class="confetti confetti--7"></div>
+                <div class="confetti confetti--8"></div>
+                <div class="confetti confetti--9"></div>
+                <div class="confetti confetti--10"></div>
+                <div class="confetti confetti--11"></div>
+                <div class="confetti confetti--12"></div>
+                <div class="confetti confetti--13"></div>
+                <div class="confetti confetti--14"></div>
+                <div class="confetti confetti--15"></div>
+                <div class="confetti confetti--16"></div>
+                <div class="confetti confetti--17"></div>
+                <div class="confetti confetti--18"></div>
+                <div class="confetti confetti--19"></div>
+                <div class="confetti confetti--20"></div>
+
+                <!-- Easter Bunny: rises at 10.5s, idles after -->
+                <div class="bunny">
+                    <div class="bunny__ears">
+                        <div class="bunny__ear bunny__ear--left"></div>
+                        <div class="bunny__ear bunny__ear--right"></div>
+                    </div>
+                    <div class="bunny__head">
+                        <div class="bunny__eye bunny__eye--left"></div>
+                        <div class="bunny__eye bunny__eye--right"></div>
+                        <div class="bunny__nose"></div>
+                        <div class="bunny__mouth"></div>
+                    </div>
+                    <div class="bunny__body">
+                        <div class="bunny__arm bunny__arm--left"></div>
+                        <div class="bunny__arm bunny__arm--right"></div>
+                        <div class="bunny__tail"></div>
+                    </div>
+                </div><!-- /bunny -->
+
+                <!-- Basket: pulled out at 13.7s -->
+                <div class="item item--basket">
+                    <div class="basket">
+                        <div class="basket__handle"></div>
+                        <div class="basket__body"></div>
+                    </div>
+                </div>
+
+                <!-- Flowers: pulled out at 16.5s -->
+                <div class="item item--flowers">
+                    <div class="flowers">
+                        <div class="flower">
+                            <div class="flower__stem"></div>
+                            <div class="flower__petal flower__petal--1"></div>
+                            <div class="flower__petal flower__petal--2"></div>
+                            <div class="flower__petal flower__petal--3"></div>
+                            <div class="flower__petal flower__petal--4"></div>
+                            <div class="flower__petal flower__petal--5"></div>
+                            <div class="flower__petal flower__petal--6"></div>
+                            <div class="flower__center"></div>
+                        </div>
+                        <div class="flower">
+                            <div class="flower__stem"></div>
+                            <div class="flower__petal flower__petal--1"></div>
+                            <div class="flower__petal flower__petal--2"></div>
+                            <div class="flower__petal flower__petal--3"></div>
+                            <div class="flower__petal flower__petal--4"></div>
+                            <div class="flower__petal flower__petal--5"></div>
+                            <div class="flower__petal flower__petal--6"></div>
+                            <div class="flower__center"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Small eggs: pulled out at 19.3s -->
+                <div class="item item--eggs">
+                    <div class="small-eggs">
+                        <div class="small-egg small-egg--1"></div>
+                        <div class="small-egg small-egg--2"></div>
+                        <div class="small-egg small-egg--3"></div>
+                    </div>
+                </div>
+
+                <!--
+                    Scroll: pulled out at 22s, unrolls at 23.5s, zooms to viewer at 26.5s.
+                    id attributes let PHP/JS inject the company message and link at serve time.
+                -->
+                <div class="scroll-container">
+                    <div class="scroll">
+                        <div class="scroll__roll"></div>
+                        <div class="scroll__paper">
+                            <p class="scroll__message" id="card-message">Happy Easter from your favourite company!</p>
+                            <a class="scroll__link" id="card-link" href="#">Visit us here</a>
+                        </div>
+                        <div class="scroll__roll"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Screen-reader description of the full animation sequence -->
+            <p class="sr-only">
+                An animated Easter card. A decorated egg rolls in from the distance, grows larger, and begins to crack.
+                After shaking and cracking, the egg explodes with a burst of colourful confetti.
+                An Easter Bunny emerges and retrieves items from the broken egg: a wicker basket, a bunch of flowers,
+                and small Easter eggs. Finally, the bunny pulls out a scroll which unrolls to reveal a personalised message.
+            </p>
         </section>
     </main>
     <footer>
