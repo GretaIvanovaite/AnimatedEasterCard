@@ -15,14 +15,42 @@
         <section id="card-stage" aria-label="Animated Easter card">
             <div class="scene" aria-hidden="true">
 
-                <!-- Background: sky, sun, clouds, ground -->
+                <!-- Sky and clouds — drawn first, behind everything -->
                 <div class="sky"></div>
                 <div class="sun"></div>
                 <div class="cloud cloud--1"></div>
                 <div class="cloud cloud--2"></div>
+
+                <!--
+                    BUNNY drawn before the ground, grass and egg-scene.
+                    The ground (below) renders IN FRONT of the bunny, so the
+                    green earth masks the bunny's lower body while it rises —
+                    it only becomes visible once it climbs above soil level.
+                    Grass and egg-scene (later still) also render in front.
+                -->
+                <div class="bunny">
+                    <div class="bunny__ears">
+                        <div class="bunny__ear bunny__ear--left"></div>
+                        <div class="bunny__ear bunny__ear--right"></div>
+                    </div>
+                    <div class="bunny__head">
+                        <div class="bunny__eye bunny__eye--left"></div>
+                        <div class="bunny__eye bunny__eye--right"></div>
+                        <div class="bunny__nose"></div>
+                        <div class="bunny__mouth"></div>
+                    </div>
+                    <div class="bunny__body">
+                        <div class="bunny__arm bunny__arm--left"></div>
+                        <div class="bunny__arm bunny__arm--right"></div>
+                        <div class="bunny__tail"></div>
+                    </div>
+                </div><!-- /bunny -->
+
+                <!-- Ground renders in front of the bunny — masks its lower body during rise -->
                 <div class="ground"></div>
 
-                <!-- Grass tufts (20 × 3 blades each, always swaying) -->
+                <!-- Grass tufts also render in front of the bunny -->
+
                 <div class="grass grass--1"><span></span><span></span><span></span></div>
                 <div class="grass grass--2"><span></span><span></span><span></span></div>
                 <div class="grass grass--3"><span></span><span></span><span></span></div>
@@ -44,9 +72,16 @@
                 <div class="grass grass--19"><span></span><span></span><span></span></div>
                 <div class="grass grass--20"><span></span><span></span><span></span></div>
 
-                <!-- Egg: rolls in (0s–6s), shakes and cracks (6s–9s), explodes (9s–10s) -->
+                <!--
+                    Egg-scene renders in front of the bunny AND the grass (later in DOM).
+                    Crack divs are inside .egg__top-half (the visible upper half) so all
+                    8 cracks appear on the surface before the top flies off.
+                -->
                 <div class="egg-scene">
-                    <div class="egg">
+                    <!-- Bottom shell: always clipped to lower half, no decorations needed -->
+                    <div class="egg"></div>
+                    <!-- Top half: all decoration + all crack lines live here -->
+                    <div class="egg__top-half">
                         <div class="egg__stripe"></div>
                         <div class="egg__dot egg__dot--1"></div>
                         <div class="egg__dot egg__dot--2"></div>
@@ -55,6 +90,10 @@
                         <div class="egg__crack egg__crack--2"></div>
                         <div class="egg__crack egg__crack--3"></div>
                         <div class="egg__crack egg__crack--4"></div>
+                        <div class="egg__crack egg__crack--5"></div>
+                        <div class="egg__crack egg__crack--6"></div>
+                        <div class="egg__crack egg__crack--7"></div>
+                        <div class="egg__crack egg__crack--8"></div>
                     </div>
                     <div class="egg-flash"></div>
                 </div>
@@ -80,25 +119,6 @@
                 <div class="confetti confetti--18"></div>
                 <div class="confetti confetti--19"></div>
                 <div class="confetti confetti--20"></div>
-
-                <!-- Easter Bunny: rises at 10.5s, idles after -->
-                <div class="bunny">
-                    <div class="bunny__ears">
-                        <div class="bunny__ear bunny__ear--left"></div>
-                        <div class="bunny__ear bunny__ear--right"></div>
-                    </div>
-                    <div class="bunny__head">
-                        <div class="bunny__eye bunny__eye--left"></div>
-                        <div class="bunny__eye bunny__eye--right"></div>
-                        <div class="bunny__nose"></div>
-                        <div class="bunny__mouth"></div>
-                    </div>
-                    <div class="bunny__body">
-                        <div class="bunny__arm bunny__arm--left"></div>
-                        <div class="bunny__arm bunny__arm--right"></div>
-                        <div class="bunny__tail"></div>
-                    </div>
-                </div><!-- /bunny -->
 
                 <!-- Basket: pulled out at 13.7s -->
                 <div class="item item--basket">
@@ -162,9 +182,9 @@
 
             <!-- Screen-reader description of the full animation sequence -->
             <p class="sr-only">
-                An animated Easter card. A decorated egg rolls in from the distance, grows larger, and begins to crack.
-                After shaking and cracking, the egg explodes with a burst of colourful confetti.
-                An Easter Bunny emerges and retrieves items from the broken egg: a wicker basket, a bunch of flowers,
+                An animated Easter card. A decorated egg rolls in from the left, grows larger, and begins to crack.
+                After shaking and cracking, the top of the egg flies off with a burst of colourful confetti.
+                An Easter Bunny climbs out of the broken shell and retrieves items: a wicker basket, a bunch of flowers,
                 and small Easter eggs. Finally, the bunny pulls out a scroll which unrolls to reveal a personalised message.
             </p>
         </section>
@@ -172,5 +192,106 @@
     <footer>
         <small>This is a portfolio project for Edge Hill University Web Portfolio module</small>
     </footer>
+
+    <script>
+    /*
+     * Scene scaler.
+     * The scene is drawn at a fixed 900 × 506.25 px "design" size so that all
+     * pixel-based sizes and positions in card.css are always correct.
+     * A CSS scale() transform shrinks (or grows) the scene to match whatever
+     * width the stage currently occupies, keeping everything proportional.
+     * ResizeObserver re-runs the calculation whenever the stage changes size.
+     */
+    (function () {
+        var DESIGN_W = 900;
+        var DESIGN_H = 506.25; /* 900 × 9/16 */
+
+        function scaleScene() {
+            var stage = document.getElementById('card-stage');
+            var scene = stage && stage.querySelector('.scene');
+            if (!stage || !scene) return;
+
+            /* Measure the inner content area of main (excludes its padding),
+               which is exactly the space available for the stage. */
+            var mainEl = document.querySelector('main');
+            var cs     = mainEl ? window.getComputedStyle(mainEl) : null;
+            var availW = mainEl
+                ? mainEl.clientWidth  - parseFloat(cs.paddingLeft)  - parseFloat(cs.paddingRight)
+                : window.innerWidth;
+            var availH = mainEl
+                ? mainEl.clientHeight - parseFloat(cs.paddingTop)   - parseFloat(cs.paddingBottom)
+                : window.innerHeight;
+
+            /* Pick the scale that fits in both dimensions */
+            var scale = Math.min(availW / DESIGN_W, availH / DESIGN_H);
+
+            /* Explicitly size the stage so it fills available space */
+            stage.style.width  = (scale * DESIGN_W) + 'px';
+            stage.style.height = (scale * DESIGN_H) + 'px';
+
+            /* Scale the scene content to match */
+            scene.style.width           = DESIGN_W + 'px';
+            scene.style.height          = DESIGN_H + 'px';
+            scene.style.right           = 'auto';
+            scene.style.bottom          = 'auto';
+            scene.style.transformOrigin = '0 0';
+            scene.style.transform       = 'scale(' + scale + ')';
+        }
+
+        function init() {
+            scaleScene();
+            window.addEventListener('resize', scaleScene);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    }());
+    </script>
+
+    <script>
+    /*
+     * Scroll text font scaler.
+     * The scroll paper has a fixed height (56px). If the injected message is
+     * long enough to overflow, this script reduces the font size in 0.5px steps
+     * until the content fits, stopping at a minimum of 6px.
+     * It temporarily expands the paper to its final unrolled width (200px) to
+     * get an accurate measurement, then resets it so the CSS animation works.
+     */
+    (function () {
+        function fitScrollText() {
+            var paper  = document.querySelector('.scroll__paper');
+            var msg    = document.getElementById('card-message');
+            var link   = document.getElementById('card-link');
+            if (!paper || !msg) return;
+
+            /* Expand to final unrolled dimensions for measurement */
+            paper.style.width   = '240px';
+            paper.style.padding = '6px 14px';
+
+            var size = 12;
+            msg.style.fontSize = size + 'px';
+
+            /* Shrink until all content fits inside the 56px fixed height */
+            while (size > 6 && paper.scrollHeight > paper.clientHeight) {
+                size -= 0.5;
+                msg.style.fontSize  = size + 'px';
+                if (link) link.style.fontSize = Math.max(size - 1.5, 5) + 'px';
+            }
+
+            /* Reset — the CSS animation handles the actual width/padding */
+            paper.style.width   = '';
+            paper.style.padding = '';
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', fitScrollText);
+        } else {
+            fitScrollText();
+        }
+    }());
+    </script>
 </body>
 </html>
