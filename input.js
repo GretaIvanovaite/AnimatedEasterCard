@@ -155,6 +155,14 @@ function formSubmit(submitEvent) {
         document.getElementById('companyName-error').hidden = true;
     }
 
+    const emailSubject = document.getElementById('emailSubject').value.trim();
+    if (emailSubject === '') {
+        document.getElementById('emailSubject-error').hidden = false;
+        valid = false;
+    } else {
+        document.getElementById('emailSubject-error').hidden = true;
+    }
+
     const url = document.getElementById('url').value.trim();
     if (url !== '' && !url.startsWith('https://')) {
         document.getElementById('url-error').hidden = false;
@@ -166,6 +174,7 @@ function formSubmit(submitEvent) {
     if (valid) {
         sessionStorage.setItem('companyName', companyName);
         sessionStorage.setItem('message', message);
+        sessionStorage.setItem('emailSubject', emailSubject);
         sessionStorage.setItem('url', url);
         sessionStorage.setItem('urlCaption', document.getElementById('urlCaption').value.trim());
         document.getElementById('inputForm').submit();

@@ -108,6 +108,26 @@ label {
     margin: var(--space-xs) 0;
 }
 
+#sending-results {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-m) 0;
+}
+
+#sending-results li {
+    padding: var(--space-xs) 0;
+    font-size: var(--font-size-help);
+}
+
+#sending-results .sent {
+    color: var(--colour-confirm-hover);
+}
+
+#sending-results .failed {
+    color: var(--colour-cancel-hover);
+    font-weight: var(--font-weight-semibold);
+}
+
 input,
 textarea,
 select {

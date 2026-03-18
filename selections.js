@@ -119,6 +119,12 @@ function nameColumnChange() {
 
 document.getElementById('nameColumn').addEventListener('change', nameColumnChange);
 
+document.querySelector('form').addEventListener('submit', function() {
+    sessionStorage.setItem('openingPhrase', document.getElementById('openingPhrase').value);
+    sessionStorage.setItem('emailColumn', document.getElementById('emailColumn').value);
+    sessionStorage.setItem('nameColumn', document.getElementById('nameColumn').value);
+});
+
 function getColumnValues(columnValue) {
     const fileContent = sessionStorage.getItem('uploadedFile');
     const fileName = sessionStorage.getItem('uploadedFileName');

@@ -13,12 +13,14 @@
     <main>
         <h2>Sending your cards</h2>
         <section aria-label="Sending status" aria-live="polite">
-            <p>Your cards are being sent. Please do not close this tab.</p>
-            <!-- Progress and results populated by JS -->
+            <p id="sending-status">Preparing to send...</p>
+            <ul id="sending-results"></ul>
         </section>
     </main>
     <footer>
         <small>This is a portfolio project for Edge Hill University Web Portfolio module</small>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="sending.js"></script>
 </body>
 </html>
