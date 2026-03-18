@@ -13,7 +13,8 @@
     <main>
         <form action="selections.html" method="get">
             <label for="inputType">Input type</label>
-            <select id="inputType" name="inputType">
+            <select id="inputType" name="inputType" required>
+                <option>Please select input type</option>
                 <option value="csv">CSV</option>
                 <option value="json">JSON</option>
                 <option value="xls">XLS</option>
@@ -21,12 +22,12 @@
                 <option value="manual">Manual input</option>
             </select>
 
-            <div id="fileOptions">
+            <div id="fileOptions" hidden>
                 <label for="fileUpload">Upload file</label>
                 <input id="fileUpload" type="file">
             </div>
 
-            <div id="manualOptions">
+            <div id="manualOptions" hidden>
                 <label for="manualData">Recipient data</label>
                 <p id="manualData-help" class="help">
                     Please provide the data in a comma separated format.
@@ -35,13 +36,13 @@
             </div>
 
             <label for="message">Message</label>
-            <textarea id="message" placeholder="Thank you for using our services. Happy Easter!"></textarea>
+            <textarea id="message" placeholder="Thank you for using our services. Happy Easter!" required></textarea>
 
             <label for="companyName">Your company name</label>
             <p id="companyName-help" class="help">
                 This will appear at the end of the mesage
             </p>
-            <input id="companyName" aria-describedby="companyName-help" type="text">
+            <input id="companyName" aria-describedby="companyName-help" type="text" required>
 
             <label for="companyLogo">Company logo (Optional)</label>
             <p id="companyLogo-help" class="help">
@@ -69,5 +70,6 @@
     <footer>
         <small>This is a portfolio project for Edge Hill University Web Portfolio module</small>
     </footer>
+    <script src="input.js"></script>
 </body>
 </html>
