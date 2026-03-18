@@ -25,6 +25,17 @@ main {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
+#card-logo {
+    position: absolute;
+    top: 2%;
+    left: 2%;
+    max-height: 12%;
+    max-width: 15%;
+    object-fit: contain;
+    z-index: 10;
+    border-radius: 0.25rem;
+}
+
 .scene {
     position: absolute;
     inset: 0;
@@ -953,7 +964,7 @@ main {
     height: 68px;          /* fixed — JS shrinks font until content fits */
     width: 0;
     overflow: hidden;
-    white-space: normal;   /* allow wrapping so text stays inside at 3× zoom */
+    white-space: pre-line; /* preserve newlines, allow wrapping */
     display: flex;
     flex-direction: column;
     align-items: center;

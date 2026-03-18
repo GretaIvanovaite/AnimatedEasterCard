@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css"/>
+    <link rel="stylesheet" href="card.css"/>
     <title>Preview - Animated Easter Card</title>
+    <style>
+        main {
+            width: 60vw;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -12,9 +21,155 @@
     </header>
     <main>
         <h2>Preview your card</h2>
-        <section class="card-preview" aria-label="Card preview">
-            <p class="card-preview__phrase">Thank you for being our customer!</p>
-            <img src="" alt="Easter card illustration" class="card-preview__image">
+        <section id="card-stage" aria-label="Card preview">
+            <img id="card-logo" hidden alt="Company logo">
+            <div class="scene" aria-hidden="true">
+
+                <div class="sky"></div>
+                <div class="sun"></div>
+                <div class="cloud cloud--1"></div>
+                <div class="cloud cloud--2"></div>
+
+                <div class="bunny">
+                    <div class="bunny__ears">
+                        <div class="bunny__ear bunny__ear--left"></div>
+                        <div class="bunny__ear bunny__ear--right"></div>
+                    </div>
+                    <div class="bunny__head">
+                        <div class="bunny__eye bunny__eye--left"></div>
+                        <div class="bunny__eye bunny__eye--right"></div>
+                        <div class="bunny__nose"></div>
+                        <div class="bunny__mouth"></div>
+                    </div>
+                    <div class="bunny__body">
+                        <div class="bunny__arm bunny__arm--left"></div>
+                        <div class="bunny__arm bunny__arm--right"></div>
+                        <div class="bunny__tail"></div>
+                    </div>
+                </div>
+
+                <div class="ground"></div>
+
+                <div class="grass grass--1"><span></span><span></span><span></span></div>
+                <div class="grass grass--2"><span></span><span></span><span></span></div>
+                <div class="grass grass--3"><span></span><span></span><span></span></div>
+                <div class="grass grass--4"><span></span><span></span><span></span></div>
+                <div class="grass grass--5"><span></span><span></span><span></span></div>
+                <div class="grass grass--6"><span></span><span></span><span></span></div>
+                <div class="grass grass--7"><span></span><span></span><span></span></div>
+                <div class="grass grass--8"><span></span><span></span><span></span></div>
+                <div class="grass grass--9"><span></span><span></span><span></span></div>
+                <div class="grass grass--10"><span></span><span></span><span></span></div>
+                <div class="grass grass--11"><span></span><span></span><span></span></div>
+                <div class="grass grass--12"><span></span><span></span><span></span></div>
+                <div class="grass grass--13"><span></span><span></span><span></span></div>
+                <div class="grass grass--14"><span></span><span></span><span></span></div>
+                <div class="grass grass--15"><span></span><span></span><span></span></div>
+                <div class="grass grass--16"><span></span><span></span><span></span></div>
+                <div class="grass grass--17"><span></span><span></span><span></span></div>
+                <div class="grass grass--18"><span></span><span></span><span></span></div>
+                <div class="grass grass--19"><span></span><span></span><span></span></div>
+                <div class="grass grass--20"><span></span><span></span><span></span></div>
+
+                <div class="egg-scene">
+                    <div class="egg"></div>
+                    <div class="egg__top-half">
+                        <div class="egg__stripe"></div>
+                        <div class="egg__dot egg__dot--1"></div>
+                        <div class="egg__dot egg__dot--2"></div>
+                        <div class="egg__dot egg__dot--3"></div>
+                        <div class="egg__crack egg__crack--1"></div>
+                        <div class="egg__crack egg__crack--2"></div>
+                        <div class="egg__crack egg__crack--3"></div>
+                        <div class="egg__crack egg__crack--4"></div>
+                        <div class="egg__crack egg__crack--5"></div>
+                        <div class="egg__crack egg__crack--6"></div>
+                        <div class="egg__crack egg__crack--7"></div>
+                        <div class="egg__crack egg__crack--8"></div>
+                    </div>
+                    <div class="egg-flash"></div>
+                </div>
+
+                <div class="confetti confetti--1"></div>
+                <div class="confetti confetti--2"></div>
+                <div class="confetti confetti--3"></div>
+                <div class="confetti confetti--4"></div>
+                <div class="confetti confetti--5"></div>
+                <div class="confetti confetti--6"></div>
+                <div class="confetti confetti--7"></div>
+                <div class="confetti confetti--8"></div>
+                <div class="confetti confetti--9"></div>
+                <div class="confetti confetti--10"></div>
+                <div class="confetti confetti--11"></div>
+                <div class="confetti confetti--12"></div>
+                <div class="confetti confetti--13"></div>
+                <div class="confetti confetti--14"></div>
+                <div class="confetti confetti--15"></div>
+                <div class="confetti confetti--16"></div>
+                <div class="confetti confetti--17"></div>
+                <div class="confetti confetti--18"></div>
+                <div class="confetti confetti--19"></div>
+                <div class="confetti confetti--20"></div>
+
+                <div class="item item--basket">
+                    <div class="basket">
+                        <div class="basket__handle"></div>
+                        <div class="basket__body"></div>
+                    </div>
+                </div>
+
+                <div class="item item--flowers">
+                    <div class="flowers">
+                        <div class="flower">
+                            <div class="flower__stem"></div>
+                            <div class="flower__petal flower__petal--1"></div>
+                            <div class="flower__petal flower__petal--2"></div>
+                            <div class="flower__petal flower__petal--3"></div>
+                            <div class="flower__petal flower__petal--4"></div>
+                            <div class="flower__petal flower__petal--5"></div>
+                            <div class="flower__petal flower__petal--6"></div>
+                            <div class="flower__center"></div>
+                        </div>
+                        <div class="flower">
+                            <div class="flower__stem"></div>
+                            <div class="flower__petal flower__petal--1"></div>
+                            <div class="flower__petal flower__petal--2"></div>
+                            <div class="flower__petal flower__petal--3"></div>
+                            <div class="flower__petal flower__petal--4"></div>
+                            <div class="flower__petal flower__petal--5"></div>
+                            <div class="flower__petal flower__petal--6"></div>
+                            <div class="flower__center"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item item--eggs">
+                    <div class="small-eggs">
+                        <div class="small-egg small-egg--1"></div>
+                        <div class="small-egg small-egg--2"></div>
+                        <div class="small-egg small-egg--3"></div>
+                    </div>
+                </div>
+
+                <div class="scroll-container">
+                    <div class="scroll">
+                        <div class="scroll__roll"></div>
+                        <div class="scroll__paper">
+                            <p class="scroll__message" id="card-message"></p>
+                            <a class="scroll__link" id="card-link" href="#"></a>
+                        </div>
+                        <div class="scroll__roll"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <p class="sr-only">
+                An animated Easter card preview. A decorated egg rolls in from the left, grows larger, and begins to crack.
+                After shaking and cracking, the top of the egg flies off with a burst of colourful confetti.
+                An Easter Bunny climbs out of the broken shell and retrieves items: a wicker basket, a bunch of flowers,
+                and small Easter eggs. Finally, the bunny pulls out a scroll which unrolls to reveal a personalised message.
+            </p>
         </section>
         <form action="sending.html" method="get">
             <div class="buttons">
@@ -27,5 +182,7 @@
     <footer>
         <small>This is a portfolio project for Edge Hill University Web Portfolio module</small>
     </footer>
+    <script src="card.js"></script>
+    <script src="preview.js"></script>
 </body>
 </html>

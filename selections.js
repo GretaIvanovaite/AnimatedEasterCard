@@ -70,6 +70,55 @@ function populateDropdowns() {
 
 populateDropdowns();
 
+const params = new URLSearchParams(window.location.search);
+const companyName = params.get('companyName') || '{company name}';
+
+const openingPhrase = document.getElementById('openingPhrase');
+const customerNameOptions = [];
+
+for (let i = 0; i < openingPhrase.options.length; i++) {
+    const option = openingPhrase.options[i];
+    option.textContent = option.textContent.replace('{company name}', companyName);
+
+    if (option.textContent.indexOf('{customer name}') !== -1) {
+        customerNameOptions.push(option);
+    }
+}
+
+for (let i = 0; i < customerNameOptions.length; i++) {
+    openingPhrase.removeChild(customerNameOptions[i]);
+}
+
+function nameColumnChange() {
+    const nameSelected = document.getElementById('nameColumn').value;
+
+    if (nameSelected !== '') {
+        for (let i = 0; i < customerNameOptions.length; i++) {
+            openingPhrase.appendChild(customerNameOptions[i]);
+        }
+    } else {
+        for (let i = 0; i < customerNameOptions.length; i++) {
+            if (customerNameOptions[i].parentNode === openingPhrase) {
+                openingPhrase.removeChild(customerNameOptions[i]);
+            }
+        }
+
+        const currentValue = openingPhrase.value;
+        let currentStillExists = false;
+        for (let i = 0; i < openingPhrase.options.length; i++) {
+            if (openingPhrase.options[i].value === currentValue) {
+                currentStillExists = true;
+                break;
+            }
+        }
+        if (!currentStillExists) {
+            openingPhrase.selectedIndex = 0;
+        }
+    }
+}
+
+document.getElementById('nameColumn').addEventListener('change', nameColumnChange);
+
 function getColumnValues(columnValue) {
     const fileContent = sessionStorage.getItem('uploadedFile');
     const fileName = sessionStorage.getItem('uploadedFileName');

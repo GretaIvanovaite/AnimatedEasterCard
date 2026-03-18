@@ -59,6 +59,20 @@ function fileUpload() {
 
 document.getElementById('fileUpload').addEventListener('change', fileUpload);
 
+function logoUpload() {
+    const file = document.getElementById('companyLogo').files[0];
+    if (!file) {
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(fileEvent) {
+        sessionStorage.setItem('companyLogo', fileEvent.target.result);
+    };
+    reader.readAsDataURL(file);
+}
+
+document.getElementById('companyLogo').addEventListener('change', logoUpload);
+
 function isValidEmail(email) {
     const parts = email.split('@');
     if (parts.length !== 2) {
@@ -150,6 +164,10 @@ function formSubmit(submitEvent) {
     }
 
     if (valid) {
+        sessionStorage.setItem('companyName', companyName);
+        sessionStorage.setItem('message', message);
+        sessionStorage.setItem('url', url);
+        sessionStorage.setItem('urlCaption', document.getElementById('urlCaption').value.trim());
         document.getElementById('inputForm').submit();
     }
 }
