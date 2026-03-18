@@ -39,16 +39,17 @@
             </div>
 
             <label for="message">Message</label>
-            <textarea id="message" placeholder="Thank you for using our services. Happy Easter!" aria-required="true"></textarea>
-            <p id="message-error" class="error" aria-live="polite" hidden>Please enter a message.</p>
+            <p id="message-help" class="help">Maximum 400 characters.</p>
+            <textarea id="message" aria-describedby="message-help" placeholder="Thank you for using our services. Happy Easter!" aria-required="true" maxlength="400"></textarea>
+            <p id="message-error" class="error" aria-live="polite" hidden>Please enter a message (maximum 400 characters).</p>
 
             <label for="companyName">Your company name</label>
-            <input id="companyName" aria-describedby="companyName-help" type="text" placeholder="Acme Ltd" aria-required="true">
-            <p id="companyName-error" class="error" aria-live="polite" hidden>Please enter your company name.</p>
+            <input id="companyName" aria-describedby="companyName-help" type="text" placeholder="Acme Ltd" aria-required="true" maxlength="120">
+            <p id="companyName-error" class="error" aria-live="polite" hidden>Please enter your company name (maximum 60 characters).</p>
 
             <label for="emailSubject">Email subject</label>
-            <input id="emailSubject" type="text" placeholder="Happy Easter from Acme Ltd!" aria-required="true">
-            <p id="emailSubject-error" class="error" aria-live="polite" hidden>Please enter an email subject.</p>
+            <input id="emailSubject" type="text" placeholder="Happy Easter from Acme Ltd!" aria-required="true" maxlength="120">
+            <p id="emailSubject-error" class="error" aria-live="polite" hidden>Please enter an email subject (maximum 100 characters).</p>
 
             <label for="companyLogo">Company logo (Optional)</label>
             <p id="companyLogo-help" class="help">
@@ -60,14 +61,14 @@
             <p id="companyURL-help" class="help">
                 This is a URL to invite your customers to check out deals or to visit a specific page.
             </p>
-            <input id="url" aria-describedby="companyURL-help" type="url" placeholder="https://www.example.com">
+            <textarea id="url" aria-describedby="companyURL-help" placeholder="https://www.example.com" rows="1"></textarea>
             <p id="url-error" class="error" aria-live="polite" hidden>Please enter a secure URL starting with https://</p>
 
             <label for="urlCaption">URL caption (Optional)</label>
             <p id="URLcaption-help" class="help">
                 If you have provided a URL above, please provide a short phrase to caption the link.
             </p>
-            <input id="urlCaption" aria-describedby="URLcaption-help"  placeholder="Check out our Easter deals" type="text">
+            <input id="urlCaption" aria-describedby="URLcaption-help" placeholder="Check out our Easter deals" type="text" maxlength="120">
             <div class="buttons">
                 <button type="submit" class="next">Next</button>
                 <button type="reset">Clear</button>

@@ -1,6 +1,6 @@
-const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
-const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+const EMAILJS_PUBLIC_KEY = '5_ikJo7yhP4ygQwQ8';
+const EMAILJS_SERVICE_ID = 'service_5d8voct';
+const EMAILJS_TEMPLATE_ID = 'template_qv1y2ic';
 
 const phraseMap = {
     'happy-easter': 'Happy Easter!',
@@ -64,7 +64,7 @@ function getRecipients() {
 }
 
 function buildCardUrl(recipientName) {
-    const base = window.location.href.replace('sending.html', 'card.html');
+    const base = window.location.origin + window.location.pathname.replace('sending.html', 'card.html');
     const params = new URLSearchParams();
     params.set('phrase', openingPhraseValue);
     params.set('message', message);

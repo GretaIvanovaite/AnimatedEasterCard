@@ -151,6 +151,13 @@ textarea  {
     height: var(--input-long-height);
 }
 
+#url {
+    height: auto;
+    resize: none;
+    overflow: hidden;
+    field-sizing: content;
+}
+
 input[type="file"],
 select {
     width: var(--input-width-other);
