@@ -101,6 +101,13 @@ label {
     margin: var(--space-xs) 0;
 }
 
+.error {
+    font-size: var(--font-size-help);
+    font-weight: var(--font-weight-semibold);
+    color: var(--colour-cancel-hover);
+    margin: var(--space-xs) 0;
+}
+
 input,
 textarea,
 select {

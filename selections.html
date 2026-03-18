@@ -16,13 +16,12 @@
             <label for="emailColumn">Email column</label>
             <select id="emailColumn" name="emailColumn">
                 <option value="">Select a column...</option>
-                <!-- Options populated from uploaded data -->
             </select>
+            <p id="emailColumn-error" class="error" aria-live="polite" hidden>The selected column does not appear to contain valid email addresses. Please choose a different column.</p>
 
             <label for="nameColumn">Customer name column (optional)</label>
             <select id="nameColumn" name="nameColumn">
                 <option value="">None</option>
-                <!-- Options populated from uploaded data -->
             </select>
 
             <label for="openingPhrase">Opening phrase</label>
@@ -46,5 +45,6 @@
     <footer>
         <small>This is a portfolio project for Edge Hill University Web Portfolio module</small>
     </footer>
+    <script src="selections.js"></script>
 </body>
 </html>

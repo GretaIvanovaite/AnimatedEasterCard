@@ -11,9 +11,9 @@
         <h1>Personalised easter card</h1>
     </header>
     <main>
-        <form action="selections.html" method="get">
+        <form id="inputForm" action="selections.html" method="get">
             <label for="inputType">Input type</label>
-            <select id="inputType" name="inputType" required>
+            <select id="inputType" name="inputType" aria-required="true">
                 <option>Please select input type</option>
                 <option value="csv">CSV</option>
                 <option value="json">JSON</option>
@@ -21,40 +21,43 @@
                 <option value="xlsx">XLSX</option>
                 <option value="manual">Manual input</option>
             </select>
+            <p id="inputType-error" class="error" aria-live="polite" hidden>Please select an input type.</p>
 
             <div id="fileOptions" hidden>
                 <label for="fileUpload">Upload file</label>
                 <input id="fileUpload" type="file">
+                <p id="fileUpload-error" class="error" aria-live="polite" hidden>Please upload a file.</p>
             </div>
 
             <div id="manualOptions" hidden>
                 <label for="manualData">Recipient data</label>
                 <p id="manualData-help" class="help">
-                    Please provide the data in a comma separated format.
+                    Enter one recipient per line. Email is required, name is optional. Format: email or email, name.
                 </p>
-                <textarea id="manualData" aria-describedby="manualData-help"></textarea>
+                <textarea id="manualData" aria-describedby="manualData-help" placeholder="jane@example.com, Jane Smith&#10;john@example.com"></textarea>
+                <p id="manualData-error" class="error" aria-live="polite" hidden>Please enter at least one recipient. Each line must contain a valid email address.</p>
             </div>
 
             <label for="message">Message</label>
-            <textarea id="message" placeholder="Thank you for using our services. Happy Easter!" required></textarea>
+            <textarea id="message" placeholder="Thank you for using our services. Happy Easter!" aria-required="true"></textarea>
+            <p id="message-error" class="error" aria-live="polite" hidden>Please enter a message.</p>
 
             <label for="companyName">Your company name</label>
-            <p id="companyName-help" class="help">
-                This will appear at the end of the mesage
-            </p>
-            <input id="companyName" aria-describedby="companyName-help" type="text" required>
+            <input id="companyName" aria-describedby="companyName-help" type="text" placeholder="Acme Ltd" aria-required="true">
+            <p id="companyName-error" class="error" aria-live="polite" hidden>Please enter your company name.</p>
 
             <label for="companyLogo">Company logo (Optional)</label>
             <p id="companyLogo-help" class="help">
                 If you would like your company logo to be shown on the card, please upload it here.
             </p>
-            <input id="companyLogo" aria-describedby="companyLogo-help" type="file">
+            <input id="companyLogo" aria-describedby="companyLogo-help" type="file" accept=".jpg,.jpeg,.png,.gif,.webp,.svg,image/*">
 
             <label for="url">URL (Optional)</label>
             <p id="companyURL-help" class="help">
                 This is a URL to invite your customers to check out deals or to visit a specific page.
             </p>
-            <input id="url" aria-describedby="companyURL-help" type="url">
+            <input id="url" aria-describedby="companyURL-help" type="url" placeholder="https://www.example.com">
+            <p id="url-error" class="error" aria-live="polite" hidden>Please enter a secure URL starting with https://</p>
 
             <label for="urlCaption">URL caption (Optional)</label>
             <p id="URLcaption-help" class="help">
@@ -70,6 +73,7 @@
     <footer>
         <small>This is a portfolio project for Edge Hill University Web Portfolio module</small>
     </footer>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <script src="input.js"></script>
 </body>
 </html>

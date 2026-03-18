@@ -3,8 +3,15 @@ function inputOption() {
     const fileOptions = ['csv', 'json', 'xls', 'xlsx'];
 
     if (fileOptions.includes(dropdownChoice)) {
+        const acceptTypes = {
+            csv: '.csv,.txt,text/csv,text/plain',
+            json: '.json,application/json',
+            xls: '.xls,application/vnd.ms-excel',
+            xlsx: '.xlsx,.xlsm,.xlsb,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        };
         document.getElementById('fileOptions').hidden = false;
         document.getElementById('fileUpload').required = true;
+        document.getElementById('fileUpload').accept = acceptTypes[dropdownChoice];
         document.getElementById('manualOptions').hidden = true;
         document.getElementById('manualData').required = false;
     } else if (dropdownChoice === 'manual') {
@@ -22,3 +29,129 @@ function inputOption() {
 
 const optionsDropdown = document.getElementById('inputType');
 optionsDropdown.addEventListener('change', inputOption);
+window.addEventListener('pageshow', inputOption);
+
+function fileUpload() {
+    const file = document.getElementById('fileUpload').files[0];
+    const fileName = file.name;
+    const nameParts = fileName.split('.');
+    const extension = nameParts[nameParts.length - 1].toLowerCase();
+    const reader = new FileReader();
+
+    if (extension === 'xls' || extension === 'xlsx') {
+        reader.onload = function(fileEvent) {
+            const workbook = XLSX.read(fileEvent.target.result, { type: 'array' });
+            const firstSheetName = workbook.SheetNames[0];
+            const firstSheet = workbook.Sheets[firstSheetName];
+            const csv = XLSX.utils.sheet_to_csv(firstSheet);
+            sessionStorage.setItem('uploadedFile', csv);
+            sessionStorage.setItem('uploadedFileName', fileName);
+        };
+        reader.readAsArrayBuffer(file);
+    } else {
+        reader.onload = function(fileEvent) {
+            sessionStorage.setItem('uploadedFile', fileEvent.target.result);
+            sessionStorage.setItem('uploadedFileName', fileName);
+        };
+        reader.readAsText(file);
+    }
+}
+
+document.getElementById('fileUpload').addEventListener('change', fileUpload);
+
+function isValidEmail(email) {
+    const parts = email.split('@');
+    if (parts.length !== 2) {
+        return false;
+    }
+    if (parts[0] === '' || parts[1] === '') {
+        return false;
+    }
+    if (parts[1].indexOf('.') === -1) {
+        return false;
+    }
+    return true;
+}
+
+function formSubmit(submitEvent) {
+    submitEvent.preventDefault();
+    const fileOptions = ['csv', 'json', 'xls', 'xlsx'];
+    const dropdownChoice = document.getElementById('inputType').value;
+    const message = document.getElementById('message').value.trim();
+    const companyName = document.getElementById('companyName').value.trim();
+    let valid = true;
+
+    if (!fileOptions.includes(dropdownChoice) && dropdownChoice !== 'manual') {
+        document.getElementById('inputType-error').hidden = false;
+        valid = false;
+    } else {
+        document.getElementById('inputType-error').hidden = true;
+    }
+
+    if (fileOptions.includes(dropdownChoice)) {
+        const file = document.getElementById('fileUpload').files[0];
+        if (!file) {
+            document.getElementById('fileUpload-error').hidden = false;
+            valid = false;
+        } else {
+            document.getElementById('fileUpload-error').hidden = true;
+        }
+    }
+
+    if (dropdownChoice === 'manual') {
+        const text = document.getElementById('manualData').value;
+        const lines = text.split('\n');
+        const validLines = [];
+        let manualValid = true;
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (line !== '') {
+                const parts = line.split(',');
+                const email = parts[0].trim();
+                if (!isValidEmail(email)) {
+                    manualValid = false;
+                } else {
+                    validLines.push(line);
+                }
+            }
+        }
+
+        if (!manualValid || validLines.length === 0) {
+            document.getElementById('manualData-error').hidden = false;
+            valid = false;
+        } else {
+            document.getElementById('manualData-error').hidden = true;
+            sessionStorage.setItem('uploadedFile', validLines.join('\n'));
+            sessionStorage.setItem('uploadedFileName', 'manual');
+        }
+    }
+
+    if (message === '') {
+        document.getElementById('message-error').hidden = false;
+        valid = false;
+    } else {
+        document.getElementById('message-error').hidden = true;
+    }
+
+    if (companyName === '') {
+        document.getElementById('companyName-error').hidden = false;
+        valid = false;
+    } else {
+        document.getElementById('companyName-error').hidden = true;
+    }
+
+    const url = document.getElementById('url').value.trim();
+    if (url !== '' && !url.startsWith('https://')) {
+        document.getElementById('url-error').hidden = false;
+        valid = false;
+    } else {
+        document.getElementById('url-error').hidden = true;
+    }
+
+    if (valid) {
+        document.getElementById('inputForm').submit();
+    }
+}
+
+document.getElementById('inputForm').addEventListener('submit', formSubmit);
