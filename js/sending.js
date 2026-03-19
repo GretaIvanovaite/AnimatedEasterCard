@@ -101,18 +101,29 @@ async function sendAll() {
 
     const recipients = getRecipients();
     const statusEl = document.getElementById('sending-status');
+    const progressContainer = document.getElementById('progress-container');
+    const progressTrack = document.getElementById('progress-track');
+    const progressFill = document.getElementById('progress-fill');
+    const progressLabel = document.getElementById('progress-label');
 
     if (recipients.length === 0) {
         statusEl.textContent = 'No recipients found.';
         return;
     }
 
+    progressContainer.hidden = false;
+    progressTrack.setAttribute('aria-valuemax', recipients.length);
+
     let sent = 0;
     let failed = 0;
 
     for (let i = 0; i < recipients.length; i++) {
         const recipient = recipients[i];
-        statusEl.textContent = 'Sending ' + (i + 1) + ' of ' + recipients.length + '...';
+        const current = i + 1;
+
+        statusEl.textContent = 'Sending...';
+        progressLabel.textContent = current + ' of ' + recipients.length;
+        progressTrack.setAttribute('aria-valuenow', current);
 
         const cardUrl = buildCardUrl(recipient.name);
         const phraseText = buildPhraseText(recipient.name);
@@ -137,8 +148,11 @@ async function sendAll() {
             addResult(recipient.email, false);
             failed++;
         }
+
+        progressFill.style.width = Math.round((current / recipients.length) * 100) + '%';
     }
 
+    progressLabel.textContent = recipients.length + ' of ' + recipients.length;
     statusEl.textContent = 'Done. ' + sent + ' sent, ' + failed + ' failed.';
 }
 

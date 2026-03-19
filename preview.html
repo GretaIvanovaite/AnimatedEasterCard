@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css"/>
     <link rel="stylesheet" href="css/card.css"/>
-    <title>Preview - Animated Easter Card</title>
+    <title>Preview — Animated Easter Card</title>
     <style>
         main {
-            width: 60vw;
+            width: min(760px, 96vw);
             flex-direction: column;
             align-items: stretch;
             justify-content: flex-start;
@@ -17,10 +17,34 @@
 </head>
 <body>
     <header>
-        <h1>Personalised easter card</h1>
+        <h1>Easter Card Creator</h1>
     </header>
     <main>
+
+        <nav class="steps" aria-label="Progress steps">
+            <div class="step step--done">
+                <div class="step__dot">&#x2713;</div>
+                <span class="step__label">Details</span>
+            </div>
+            <div class="step-connector step-connector--done"></div>
+            <div class="step step--done">
+                <div class="step__dot">&#x2713;</div>
+                <span class="step__label">Personalise</span>
+            </div>
+            <div class="step-connector step-connector--done"></div>
+            <div class="step step--active">
+                <div class="step__dot">3</div>
+                <span class="step__label">Preview</span>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step__dot">4</div>
+                <span class="step__label">Send</span>
+            </div>
+        </nav>
+
         <h2>Preview your card</h2>
+
         <section id="card-stage" aria-label="Card preview">
             <img id="card-logo" hidden alt="Company logo">
             <div class="scene" aria-hidden="true">
@@ -171,16 +195,18 @@
                 and small Easter eggs. Finally, the bunny pulls out a scroll which unrolls to reveal a personalised message.
             </p>
         </section>
+
         <form action="sending.html" method="get">
             <div class="buttons">
-                <p class="help">Clicking confirm will start sending your cards to all recipients.</p>
+                <p class="help">Clicking Confirm will start sending your cards to all recipients.</p>
                 <button type="button" class="back" onclick="history.back()">Back</button>
-                <button type="submit" class="next">Confirm</button>
+                <button type="submit" class="next">Confirm &amp; Send</button>
             </div>
         </form>
+
     </main>
     <footer>
-        <small>This is a portfolio project for Edge Hill University Web Portfolio module</small>
+        <small>Portfolio project &mdash; Edge Hill University CIS3413 Advanced Web Portfolio</small>
     </footer>
     <script src="js/card.js"></script>
     <script src="js/preview.js"></script>
