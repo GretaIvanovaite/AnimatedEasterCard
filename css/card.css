@@ -22,7 +22,18 @@ main {
     aspect-ratio: 16 / 9;
     overflow: hidden;
     border-radius: 1rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 0 60px rgba(0, 0, 0, 0.06);
+}
+
+/* Vignette — darkens the corners for cinematic depth */
+#card-stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    background: radial-gradient(ellipse at 50% 45%, transparent 52%, rgba(0, 0, 0, 0.20) 100%);
+    pointer-events: none;
+    z-index: 2;
 }
 
 #card-logo {
@@ -49,10 +60,10 @@ main {
     inset: 0 0 30% 0;
     background: linear-gradient(
         to bottom,
-        #4a9fd4 0%,
-        #87ceeb 45%,
-        #b8e4f9 78%,
-        #fde9c5 100%
+        #6db8d9 0%,
+        #9ccfe8 45%,
+        #BBDEFB 78%,
+        #E8F4FC 100%
     );
 }
 
@@ -160,7 +171,19 @@ main {
     left: 0;
     right: 0;
     height: 30%;
-    background: linear-gradient(180deg, #7bc47f 0%, #56a65b 38%, #3b8840 100%);
+    background: linear-gradient(180deg, #6ab870 0%, #4a9e52 38%, #2e7a38 100%);
+    border-radius: 52% 52% 0 0 / 10% 10% 0 0;
+}
+
+/* Soft sunlit highlight along the top of the ground */
+.ground::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 22%;
+    background: linear-gradient(to bottom, rgba(180, 240, 160, 0.38) 0%, transparent 100%);
     border-radius: 52% 52% 0 0 / 10% 10% 0 0;
 }
 
@@ -178,7 +201,7 @@ main {
 .grass span {
     display: block;
     width: 5px;
-    background: linear-gradient(to top, #459948, #68c46e);
+    background: linear-gradient(to top, #3d8e44, #5ab560);
     border-radius: 3px 3px 0 0;
     transform-origin: bottom center;
 }
@@ -253,6 +276,11 @@ main {
  * The egg-scene is anchored so its bottom edge sits on the ground line,
  * horizontally centred. All transform work (centering, scale, rotate)
  * is done inside the keyframes so there is no static transform conflict.
+ *
+ * transform-origin: bottom center ensures that scale() always anchors
+ * from the bottom of the container, so the egg stays on the ground line
+ * at every scale value during the roll-in (previously it floated because
+ * the default centre origin lifted the visual bottom at small scales).
  */
 .egg-scene {
     position: absolute;
@@ -260,6 +288,7 @@ main {
     left: 50%;
     width: 120px;
     height: 150px;
+    transform-origin: bottom center;
     animation:
         egg-roll-in 6s ease-out   forwards,
         egg-shake   3s ease-in-out 6s forwards;
@@ -271,16 +300,80 @@ main {
  * Scale 0.6→1 gives a gentle depth/distance effect.
  * No translateY: the egg stays on the ground line throughout.
  */
+/* Pure translate + scale — the morph from flat oval to upright is
+   handled by the child elements (.egg__lying fades out, .egg fades in). */
 @keyframes egg-roll-in {
-    0%   { transform: translateX(calc(-50% - 700px)) scale(0.6) rotate(   0deg); }
-    100% { transform: translateX(-50%)               scale(1)   rotate(-720deg); }
+    0%   { transform: translateX(calc(-50% - 700px)) scale(0.6); }
+    100% { transform: translateX(-50%)               scale(1);   }
+}
+
+/*
+ * Flat oval — represents the egg lying on its side as seen from the front.
+ * Starts very squished (scaleY 0.18 ≈ 27px tall) so it looks like a
+ * ground-level oval/disc. Elongates toward full height while fading out,
+ * implying the egg rising upright. transform-origin: bottom center keeps
+ * the base on the ground as it grows.
+ */
+.egg__lying {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    background:
+        radial-gradient(ellipse at 42% 32%, rgba(255, 255, 255, 0.32) 0%, transparent 48%),
+        radial-gradient(ellipse at 50% 78%, rgba(80, 30, 0, 0.22) 0%, transparent 52%),
+        linear-gradient(145deg, #ffe8c0 0%, #ffd080 35%, #ffb040 65%, #f08830 100%);
+    border-radius: 50%;
+    overflow: hidden;   /* clips the orbiting dot to the circle */
+    transform-origin: bottom center;
+    pointer-events: none;
+    animation: egg-lying-morph 6s ease-out forwards;
+}
+
+/*
+ * Orbiting dot of light — uses the transform-origin trick.
+ * The dot is placed 16px to the right of the circle's centre.
+ * transform-origin: -10px 6px points back to the circle centre,
+ * so rotating this element makes the dot orbit a 16px radius circle.
+ * overflow: hidden on the parent clips it to the egg shape.
+ */
+.egg__lying::before {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 38%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.4) 55%, transparent 100%);
+    top:  calc(50% - 6px);   /* vertically centred on circle centre */
+    left: calc(50% + 16px);  /* 22px right of circle centre */
+    transform-origin: -16px 6px;  /* vector back to circle centre */
+    animation: dot-orbit 0.65s linear infinite;
+}
+
+@keyframes dot-orbit {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/*
+ * Stays as a circle while rolling.
+ * At 75% (as the egg decelerates) the top begins to elongate gently upward.
+ * At 88% it snaps sharply to full height and fades out — the "pop" into the
+ * real upright egg. The real egg appears at the same moment (see egg-stand-up).
+ */
+@keyframes egg-lying-morph {
+    0%   { opacity: 1; transform: translateX(-50%) scaleY(1); }
+    75%  { opacity: 1; transform: translateX(-50%) scaleY(1);    animation-timing-function: ease-in; }
+    88%  { opacity: 1; transform: translateX(-50%) scaleY(1.18); animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+    100% { opacity: 0; transform: translateX(-50%) scaleY(1.5); }
 }
 
 /*
  * Bottom shell: ALWAYS clipped to the lower half via static clip-path.
- * Both .egg and .egg__top-half together look like one complete egg
- * during roll-in. When the top half flies off the shell remains.
- * No animation needed — clip-path is permanent.
+ * Starts invisible and fades in during the second half of the roll-in,
+ * timed to match .egg__lying fading out so the transition looks seamless.
+ * When the top half flies off at 9s the shell remains visible.
  */
 .egg {
     position: absolute;
@@ -290,14 +383,13 @@ main {
         linear-gradient(145deg, #ffe8c0 0%, #ffd080 35%, #ffb040 65%, #f08830 100%);
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
     overflow: hidden;
-    clip-path: inset(50% 0 0 0);   /* always shows bottom half (the shell bowl) */
+    clip-path: inset(50% 0 0 0);
+    animation: egg-stand-up 6s ease-out forwards;
 }
 
 /*
- * Top half: ALWAYS clipped to the upper half. Visible from the start so the
- * egg looks complete during roll-in. Carries all the decorations.
- * overflow: hidden clips its children to the oval before the clip-path halves it.
- * At 9s it flies upward and fades, leaving just the shell below.
+ * Top half: starts invisible alongside .egg, fades in together.
+ * At 9s the egg-top-fly animation takes over, flying the top off.
  */
 .egg__top-half {
     position: absolute;
@@ -306,10 +398,20 @@ main {
         radial-gradient(ellipse at 32% 28%, rgba(255, 255, 255, 0.55) 0%, transparent 45%),
         linear-gradient(145deg, #ffe8c0 0%, #ffd080 35%, #ffb040 65%, #f08830 100%);
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    overflow: hidden;              /* clips stripe/dots to the oval */
-    clip-path: inset(0 0 50% 0);  /* always shows top half only */
+    overflow: hidden;
+    clip-path: inset(0 0 50% 0);
     pointer-events: none;
-    animation: egg-top-fly 1.0s ease-in 9s forwards;
+    animation:
+        egg-stand-up  6s ease-out forwards,
+        egg-top-fly   1.0s ease-in 9s forwards;
+}
+
+/* Egg snaps in at the pop point (88%), matching the circle's sharp upward snap */
+@keyframes egg-stand-up {
+    0%   { opacity: 0; }
+    88%  { opacity: 0; }
+    91%  { opacity: 1; }
+    100% { opacity: 1; }
 }
 
 @keyframes egg-top-fly {
@@ -362,7 +464,7 @@ main {
 /* ── Crack lines (hidden until the shake phase, 6s+) ────────────── */
 .egg__crack {
     position: absolute;
-    background: rgba(70, 30, 5, 0.8);
+    background: rgba(160, 82, 20, 0.65);  /* warm sienna brown */
     border-radius: 1px;
     opacity: 0;
     animation: crack-appear 0.25s ease-in forwards;
@@ -374,14 +476,14 @@ main {
  * before the top half flies off.  Eight cracks appear progressively
  * through the shake phase (6.3 s → 8.6 s).
  */
-.egg__crack--1 { width: 3px; height: 26%; top: 10%; left: 44%; transform: rotate(12deg);  animation-delay: 6.3s; }
-.egg__crack--2 { width: 2px; height: 20%; top: 20%; left: 28%; transform: rotate(-25deg); animation-delay: 6.7s; }
-.egg__crack--3 { width: 2px; height: 18%; top: 30%; right: 24%; transform: rotate(35deg); animation-delay: 7.1s; }
-.egg__crack--4 { width: 2px; height: 15%; top: 16%; right: 18%; transform: rotate(-12deg); animation-delay: 7.4s; }
-.egg__crack--5 { width: 2px; height: 19%; top: 26%; left: 56%; transform: rotate(-20deg); animation-delay: 7.7s; }
-.egg__crack--6 { width: 2px; height: 14%; top: 37%; left: 22%; transform: rotate(42deg);  animation-delay: 8.0s; }
-.egg__crack--7 { width: 3px; height: 12%; top: 40%; right: 32%; transform: rotate(-5deg);  animation-delay: 8.3s; }
-.egg__crack--8 { width: 2px; height: 10%; top: 44%; left: 50%; transform: rotate(9deg);   animation-delay: 8.6s; }
+.egg__crack--1 { width: 2px; height: 26%; top: 10%; left: 44%; transform: rotate(12deg);  animation-delay: 6.3s; }
+.egg__crack--2 { width: 1px; height: 20%; top: 20%; left: 28%; transform: rotate(-25deg); animation-delay: 6.7s; }
+.egg__crack--3 { width: 1px; height: 18%; top: 30%; right: 24%; transform: rotate(35deg); animation-delay: 7.1s; }
+.egg__crack--4 { width: 1px; height: 15%; top: 16%; right: 18%; transform: rotate(-12deg); animation-delay: 7.4s; }
+.egg__crack--5 { width: 1px; height: 19%; top: 26%; left: 56%; transform: rotate(-20deg); animation-delay: 7.7s; }
+.egg__crack--6 { width: 1px; height: 14%; top: 37%; left: 22%; transform: rotate(42deg);  animation-delay: 8.0s; }
+.egg__crack--7 { width: 2px; height: 12%; top: 40%; right: 32%; transform: rotate(-5deg);  animation-delay: 8.3s; }
+.egg__crack--8 { width: 1px; height: 10%; top: 44%; left: 50%; transform: rotate(9deg);   animation-delay: 8.6s; }
 
 @keyframes crack-appear {
     from { opacity: 0; }
@@ -395,7 +497,7 @@ main {
  * Intensity increases over time to build up to the explosion.
  */
 @keyframes egg-shake {
-    0%,  100% { transform: translateX(-50%) scale(1)    rotate(0deg);  }
+    0%,  100% { transform: translateX(-50%)               scale(1)    rotate(0deg);  }
     10%        { transform: translateX(calc(-50% + 6px))  scale(1)    rotate( 3deg); }
     20%        { transform: translateX(calc(-50% - 6px))  scale(1)    rotate(-3deg); }
     30%        { transform: translateX(calc(-50% + 9px))  scale(1)    rotate( 4deg); }
@@ -523,6 +625,7 @@ main {
     left: 50%;
     width: 100px;
     opacity: 0;
+    filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.22));
     animation:
         bunny-rise   1.6s ease-out 10.5s forwards,
         bunny-bounce 2.4s ease-in-out 12.5s infinite;
@@ -536,16 +639,18 @@ main {
  * Small scale-up (0.75 → 1) reinforces the "emerging from tight space" feel.
  */
 @keyframes bunny-rise {
-    0%   { transform: translateX(-50%) translateY(35%) scale(0.75); opacity: 0; }
+    0%   { transform: translateX(-50%) translateY(35%)  scale(0.75); opacity: 0; }
     20%  { opacity: 1; }
-    80%  { transform: translateX(-50%) translateY(-2%) scale(1.02); opacity: 1; }
-    100% { transform: translateX(-50%) translateY(0%)  scale(1);    opacity: 1; }
+    72%  { transform: translateX(-50%) translateY(-8%)  scale(1.05); opacity: 1; }
+    86%  { transform: translateX(-50%) translateY(2%)   scale(0.97); opacity: 1; }
+    100% { transform: translateX(-50%) translateY(0%)   scale(1);    opacity: 1; }
 }
 
-/* Gentle idle bob once standing */
+/* Gravity-aware bob: ease-in going up, ease-out coming down */
 @keyframes bunny-bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0px); }
-    50%       { transform: translateX(-50%) translateY(-4px); }
+    0%   { transform: translateX(-50%) translateY(0px);  animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+    50%  { transform: translateX(-50%) translateY(-6px); animation-timing-function: cubic-bezier(0, 0, 0.6, 1); }
+    100% { transform: translateX(-50%) translateY(0px); }
 }
 
 /* ── Ears ───────────────────────────────────────────────────── */
@@ -735,6 +840,7 @@ main {
     position: absolute;
     bottom: 29%;
     opacity: 0;
+    filter: drop-shadow(0 5px 7px rgba(0, 0, 0, 0.20));
 }
 
 /* ── Basket: thrown left, landing ~90px left of centre ────── */
@@ -923,8 +1029,8 @@ main {
 }
 
 @keyframes scroll-appear {
-    0%   { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.7); }
-    100% { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1);   }
+    0%   { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.7) rotate(-6deg); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1)   rotate(0deg);  }
 }
 
 /*
@@ -942,13 +1048,13 @@ main {
     align-items: center;
 }
 
-/* The two rolled ends of the scroll (cylinders) */
+/* The two rolled ends of the scroll — square-edged caps */
 .scroll__roll {
     flex-shrink: 0;
     width: 14px;
     height: 68px;
     background: radial-gradient(ellipse at 32% 28%, #f5deb3 0%, #c8980e 60%, #9a7000 100%);
-    border-radius: 50%;
+    border-radius: 3px;
     box-shadow: inset -2px 0 4px rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
@@ -958,7 +1064,7 @@ main {
  * overflow: hidden clips the text until the paper is wide enough.
  */
 .scroll__paper {
-    background: linear-gradient(180deg, #fffef5 0%, #fef9e0 100%);
+    background: linear-gradient(180deg, #FFFDF6 0%, #F0FAFF 100%);
     border-top:    2px solid #c8980e;
     border-bottom: 2px solid #c8980e;
     height: 68px;          /* fixed — JS shrinks font until content fits */
@@ -982,7 +1088,7 @@ main {
 .scroll__message {
     font-size: 12px;
     font-weight: 700;
-    color: #5a3500;
+    color: #002B30;  /* --colour-text */
     text-align: center;
     margin: 0 0 6px;
     line-height: 1.4;
@@ -991,7 +1097,7 @@ main {
 
 .scroll__link {
     font-size: 10px;
-    color: #1a5fa8;
+    color: #005240;  /* --colour-confirm-hover */
     text-align: center;
     text-decoration: underline;
     display: block;
