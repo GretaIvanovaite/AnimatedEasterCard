@@ -15,6 +15,7 @@ const companyName = params.get('companyName') || '';
 const message = params.get('message') || '';
 const url = params.get('url') || '';
 const urlCaption = params.get('urlCaption') || '';
+const logoData = params.get('logo') || '';
 
 let phraseText = phraseMap[openingPhraseValue] || '';
 phraseText = phraseText.replace('{customer name}', customerName);
@@ -39,4 +40,14 @@ if (url !== '') {
     cardLink.textContent = urlCaption !== '' ? urlCaption : url;
 } else {
     cardLink.hidden = true;
+}
+
+const cardLogo = document.getElementById('card-logo');
+if (cardLogo) {
+    if (logoData !== '') {
+        cardLogo.src = logoData;
+        cardLogo.hidden = false;
+    } else {
+        cardLogo.hidden = true;
+    }
 }

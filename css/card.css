@@ -3,14 +3,28 @@
    card.css loads after styles.css, so these win the cascade.
 ============================================================ */
 
-/* Remove the 60 vw cap from styles.css so the stage can fill the page */
-main {
+/* Remove the 60 vw cap from styles.css so the stage can fill the page.
+   We only apply this flex layout when the main element DOES NOT contain a nav,
+   to avoid breaking the multi-step wizard layout. */
+main:not(:has(nav)) {
     width: 100%;
     padding: 0.75rem;
     box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* For the Preview step in the wizard, we allow the main container to be 
+   wider than the standard 640px so the animation has more room. 
+   Restored to original design width (760px) and ensured it centers 
+   all children vertically. */
+main:has(#card-stage) {
+    width: min(760px, 96vw);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
 }
 
 /* ============================================================
@@ -1104,6 +1118,10 @@ main {
     word-break: break-all;
 }
 
+[hidden] {
+    display: none !important;
+}
+
 /* ============================================================
    ACCESSIBILITY – screen-reader-only text
 ============================================================ */
@@ -1127,4 +1145,14 @@ main {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
     }
+}
+
+/* ============================================================
+   SKIP ANIMATION – helper for preview
+============================================================ */
+.skip-animations *, 
+.skip-animations *::before, 
+.skip-animations *::after {
+    animation-delay: -100s !important;
+    animation-duration: 0s !important;
 }

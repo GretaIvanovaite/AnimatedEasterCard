@@ -154,24 +154,28 @@ footer small {
 
 /* =====================================================================
    STEP PROGRESS  (4-step linear wizard)
+   Works with both legacy div structure and semantic ol/li structure.
    ===================================================================== */
-.steps {
+.steps, nav ol {
     display: flex;
     align-items: flex-start;
     justify-content: center;
     margin-bottom: var(--space-xl);
     list-style: none;
+    padding: 0;
 }
 
-.step {
+.step, nav li {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.35rem;
     min-width: 5.5rem;
+    position: relative;
+    flex: 1;
 }
 
-.step__dot {
+.step__dot, nav li span:first-child {
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 50%;
@@ -187,39 +191,59 @@ footer small {
     transition: background-color 0.2s;
 }
 
-.step--active .step__dot {
+.step--active .step__dot, 
+nav li[aria-current="step"] span:first-child {
     background: var(--colour-step-active);
-    color: var(--colour-hover-text);  /* white, 8.6:1 AAA */
+    color: var(--colour-hover-text);
 }
 
-.step--done .step__dot {
+.step--done .step__dot, 
+nav li[data-status="done"] span:first-child {
     background: var(--colour-step-done);
-    color: var(--colour-text);  /* dark text, 7.7:1 AAA */
+    color: var(--colour-text);
 }
 
-.step__label {
+.step__label, nav li span:last-child {
     font-size: 0.75rem;
     font-weight: var(--font-weight-semibold);
-    color: var(--colour-text-secondary);  /* #555, 7.3:1 on white AAA */
+    color: var(--colour-text-secondary);
     white-space: nowrap;
     text-align: center;
 }
 
 .step--active .step__label,
-.step--done .step__label {
+.step--done .step__label,
+nav li[aria-current="step"] span:last-child,
+nav li[data-status="done"] span:last-child {
     color: var(--colour-text);
 }
 
+/* Connectors for legacy structure */
 .step-connector {
     flex: 1;
     height: 2px;
     background: var(--colour-step-connector);
     align-self: flex-start;
-    margin-top: 1.125rem; /* vertically centred with the dot circles */
+    margin-top: 1.125rem;
     min-width: 1.5rem;
 }
 
 .step-connector--done {
+    background: var(--colour-step-done);
+}
+
+/* Connectors for semantic structure using pseudo-elements */
+nav li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    top: 1.125rem;
+    left: calc(50% + 1.125rem);
+    width: calc(100% - 2.25rem);
+    background: var(--colour-step-connector);
+}
+
+nav li[data-status="done"]:not(:last-child)::after {
     background: var(--colour-step-done);
 }
 

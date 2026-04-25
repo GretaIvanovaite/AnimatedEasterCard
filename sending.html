@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/layout.css"/>
     <link rel="stylesheet" href="css/styles.css"/>
     <title>Sending — Animated Easter Card</title>
 </head>
@@ -11,53 +12,50 @@
         <h1>Easter Card Creator</h1>
     </header>
     <main>
-
-        <nav class="steps" aria-label="Progress steps">
-            <div class="step step--done">
-                <div class="step__dot">&#x2713;</div>
-                <span class="step__label">Details</span>
-            </div>
-            <div class="step-connector step-connector--done"></div>
-            <div class="step step--done">
-                <div class="step__dot">&#x2713;</div>
-                <span class="step__label">Personalise</span>
-            </div>
-            <div class="step-connector step-connector--done"></div>
-            <div class="step step--done">
-                <div class="step__dot">&#x2713;</div>
-                <span class="step__label">Preview</span>
-            </div>
-            <div class="step-connector step-connector--done"></div>
-            <div class="step step--active">
-                <div class="step__dot">4</div>
-                <span class="step__label">Send</span>
-            </div>
+        <nav aria-label="Progress steps">
+            <ol>
+                <li data-status="done">
+                    <span>&#x2713;</span>
+                    <span>Details</span>
+                </li>
+                <li data-status="done">
+                    <span>&#x2713;</span>
+                    <span>Personalise</span>
+                </li>
+                <li data-status="done">
+                    <span>&#x2713;</span>
+                    <span>Preview</span>
+                </li>
+                <li aria-current="step">
+                    <span>4</span>
+                    <span>Send</span>
+                </li>
+            </ol>
         </nav>
 
-        <div class="card">
-            <h2>Sending your cards</h2>
-            <section aria-label="Sending status" aria-live="polite">
+        <section aria-labelledby="sending-heading">
+            <h2 id="sending-heading">Sending your cards</h2>
+            <div aria-label="Sending status" aria-live="polite">
                 <p id="sending-status">Preparing to send&hellip;</p>
 
-                <div class="progress-container" id="progress-container" hidden>
-                    <div class="progress-track"
-                         role="progressbar"
+                <div id="progress-container" hidden>
+                    <div role="progressbar"
                          aria-valuenow="0"
                          aria-valuemin="0"
                          aria-valuemax="100"
                          id="progress-track">
-                        <div class="progress-fill" id="progress-fill"></div>
+                        <div id="progress-fill"></div>
                     </div>
-                    <p class="progress-label" id="progress-label"></p>
+                    <p id="progress-label"></p>
                 </div>
 
                 <ul id="sending-results"></ul>
-            </section>
-        </div>
+            </div>
+        </section>
 
     </main>
     <footer>
-        <small>Portfolio project &mdash; Edge Hill University CIS3413 Advanced Web Portfolio</small>
+        <small>Portfolio project - Edge Hill University CIS3413 Advanced Web Portfolio</small>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="js/sending.js"></script>

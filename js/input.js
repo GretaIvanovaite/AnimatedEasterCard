@@ -93,10 +93,24 @@ function formSubmit(submitEvent) {
     const dropdownChoice = document.getElementById('inputType').value;
     const message = document.getElementById('message').value.trim();
     const companyName = document.getElementById('companyName').value.trim();
+    const statusEl = document.getElementById('form-status-announcer');
     let valid = true;
 
+    // reset validation state
+    const inputs = ['inputType', 'fileUpload', 'manualData', 'message', 'companyName', 'emailSubject', 'url'];
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.removeAttribute('aria-invalid');
+            el.removeAttribute('aria-describedby');
+        }
+    });
+
     if (!fileOptions.includes(dropdownChoice) && dropdownChoice !== 'manual') {
-        document.getElementById('inputType-error').hidden = false;
+        const err = document.getElementById('inputType-error');
+        err.hidden = false;
+        document.getElementById('inputType').setAttribute('aria-invalid', 'true');
+        document.getElementById('inputType').setAttribute('aria-describedby', 'inputType-error');
         valid = false;
     } else {
         document.getElementById('inputType-error').hidden = true;
@@ -105,7 +119,10 @@ function formSubmit(submitEvent) {
     if (fileOptions.includes(dropdownChoice)) {
         const file = document.getElementById('fileUpload').files[0];
         if (!file) {
-            document.getElementById('fileUpload-error').hidden = false;
+            const err = document.getElementById('fileUpload-error');
+            err.hidden = false;
+            document.getElementById('fileUpload').setAttribute('aria-invalid', 'true');
+            document.getElementById('fileUpload').setAttribute('aria-describedby', 'fileUpload-error');
             valid = false;
         } else {
             document.getElementById('fileUpload-error').hidden = true;
@@ -132,7 +149,10 @@ function formSubmit(submitEvent) {
         }
 
         if (!manualValid || validLines.length === 0) {
-            document.getElementById('manualData-error').hidden = false;
+            const err = document.getElementById('manualData-error');
+            err.hidden = false;
+            document.getElementById('manualData').setAttribute('aria-invalid', 'true');
+            document.getElementById('manualData').setAttribute('aria-describedby', 'manualData-error');
             valid = false;
         } else {
             document.getElementById('manualData-error').hidden = true;
@@ -142,14 +162,20 @@ function formSubmit(submitEvent) {
     }
 
     if (message === '') {
-        document.getElementById('message-error').hidden = false;
+        const err = document.getElementById('message-error');
+        err.hidden = false;
+        document.getElementById('message').setAttribute('aria-invalid', 'true');
+        document.getElementById('message').setAttribute('aria-describedby', 'message-error');
         valid = false;
     } else {
         document.getElementById('message-error').hidden = true;
     }
 
     if (companyName === '') {
-        document.getElementById('companyName-error').hidden = false;
+        const err = document.getElementById('companyName-error');
+        err.hidden = false;
+        document.getElementById('companyName').setAttribute('aria-invalid', 'true');
+        document.getElementById('companyName').setAttribute('aria-describedby', 'companyName-error');
         valid = false;
     } else {
         document.getElementById('companyName-error').hidden = true;
@@ -157,7 +183,10 @@ function formSubmit(submitEvent) {
 
     const emailSubject = document.getElementById('emailSubject').value.trim();
     if (emailSubject === '') {
-        document.getElementById('emailSubject-error').hidden = false;
+        const err = document.getElementById('emailSubject-error');
+        err.hidden = false;
+        document.getElementById('emailSubject').setAttribute('aria-invalid', 'true');
+        document.getElementById('emailSubject').setAttribute('aria-describedby', 'emailSubject-error');
         valid = false;
     } else {
         document.getElementById('emailSubject-error').hidden = true;
@@ -165,10 +194,20 @@ function formSubmit(submitEvent) {
 
     const url = document.getElementById('url').value.trim();
     if (url !== '' && !url.startsWith('https://')) {
-        document.getElementById('url-error').hidden = false;
+        const err = document.getElementById('url-error');
+        err.hidden = false;
+        document.getElementById('url').setAttribute('aria-invalid', 'true');
+        document.getElementById('url').setAttribute('aria-describedby', 'url-error');
         valid = false;
     } else {
         document.getElementById('url-error').hidden = true;
+    }
+
+    if (!valid) {
+        if (statusEl) {
+            statusEl.textContent = 'Form has errors. Please check the highlighted fields.';
+        }
+        return;
     }
 
     if (valid) {
@@ -177,7 +216,16 @@ function formSubmit(submitEvent) {
         sessionStorage.setItem('emailSubject', emailSubject);
         sessionStorage.setItem('url', url);
         sessionStorage.setItem('urlCaption', document.getElementById('urlCaption').value.trim());
-        document.getElementById('inputForm').submit();
+        
+        if (statusEl) {
+            statusEl.textContent = 'Details saved successfully! Proceeding to personalisation...';
+        }
+        
+        setTimeout(function() {
+            // Remove the event listener so we can submit naturally and pass GET params
+            document.getElementById('inputForm').removeEventListener('submit', formSubmit);
+            document.getElementById('inputForm').submit();
+        }, 1000);
     }
 }
 

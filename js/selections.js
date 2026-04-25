@@ -181,9 +181,12 @@ function isValidEmail(email) {
 function emailColumnValidation() {
     const columnValue = document.getElementById('emailColumn').value;
     const error = document.getElementById('emailColumn-error');
+    const emailSelect = document.getElementById('emailColumn');
 
     if (columnValue === '') {
         error.hidden = true;
+        emailSelect.removeAttribute('aria-invalid');
+        emailSelect.removeAttribute('aria-describedby');
         return false;
     }
 
@@ -199,22 +202,43 @@ function emailColumnValidation() {
 
     if (!allValid || values.length === 0) {
         error.hidden = false;
+        emailSelect.setAttribute('aria-invalid', 'true');
+        emailSelect.setAttribute('aria-describedby', 'emailColumn-error');
         return false;
     }
 
     error.hidden = true;
+    emailSelect.removeAttribute('aria-invalid');
+    emailSelect.removeAttribute('aria-describedby');
     return true;
 }
 
 document.getElementById('emailColumn').addEventListener('change', emailColumnValidation);
+
+// Create announcer element
+const statusAnnouncer = document.createElement('div');
+statusAnnouncer.setAttribute('role', 'status');
+statusAnnouncer.style.position = 'absolute';
+statusAnnouncer.style.width = '1px';
+statusAnnouncer.style.height = '1px';
+statusAnnouncer.style.padding = '0';
+statusAnnouncer.style.margin = '-1px';
+statusAnnouncer.style.overflow = 'hidden';
+statusAnnouncer.style.clip = 'rect(0, 0, 0, 0)';
+statusAnnouncer.style.whiteSpace = 'nowrap';
+statusAnnouncer.style.border = '0';
+document.body.appendChild(statusAnnouncer);
 
 document.querySelector('form').addEventListener('submit', function(submitEvent) {
     const emailSelected = document.getElementById('emailColumn').value;
     let valid = true;
 
     if (emailSelected === '') {
-        document.getElementById('emailColumn-error').hidden = false;
-        document.getElementById('emailColumn-error').textContent = 'Please select an email column.';
+        const err = document.getElementById('emailColumn-error');
+        err.hidden = false;
+        err.textContent = 'Please select an email column.';
+        document.getElementById('emailColumn').setAttribute('aria-invalid', 'true');
+        document.getElementById('emailColumn').setAttribute('aria-describedby', 'emailColumn-error');
         valid = false;
     } else {
         if (!emailColumnValidation()) {
@@ -224,5 +248,33 @@ document.querySelector('form').addEventListener('submit', function(submitEvent) 
 
     if (!valid) {
         submitEvent.preventDefault();
+        statusAnnouncer.textContent = 'Please correct the errors in the form.';
+    } else {
+        submitEvent.preventDefault();
+        
+        const openingPhrase = document.getElementById('openingPhrase').value;
+        const emailColumn = document.getElementById('emailColumn').value;
+        const nameColumn = document.getElementById('nameColumn').value;
+
+        sessionStorage.setItem('openingPhrase', openingPhrase);
+        sessionStorage.setItem('emailColumn', emailColumn);
+        sessionStorage.setItem('nameColumn', nameColumn);
+        
+        statusAnnouncer.textContent = 'Personalisation saved! Loading preview...';
+        
+        setTimeout(() => {
+            const queryParams = new URLSearchParams();
+            queryParams.append('openingPhrase', openingPhrase);
+            queryParams.append('emailColumn', emailColumn);
+            queryParams.append('nameColumn', nameColumn);
+            
+            // Also preserve companyName if it was in the current URL
+            const currentParams = new URLSearchParams(window.location.search);
+            if (currentParams.has('companyName')) {
+                queryParams.append('companyName', currentParams.get('companyName'));
+            }
+
+            window.location.href = 'preview.html?' + queryParams.toString();
+        }, 1000);
     }
 });

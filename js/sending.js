@@ -111,6 +111,10 @@ async function sendAll() {
         return;
     }
 
+    // enhance accessibility
+    statusEl.setAttribute('role', 'status');
+    statusEl.setAttribute('aria-live', 'polite');
+
     progressContainer.hidden = false;
     progressTrack.setAttribute('aria-valuemax', recipients.length);
 
@@ -121,7 +125,7 @@ async function sendAll() {
         const recipient = recipients[i];
         const current = i + 1;
 
-        statusEl.textContent = 'Sending...';
+        statusEl.textContent = 'Sending email ' + current + ' of ' + recipients.length + '...';
         progressLabel.textContent = current + ' of ' + recipients.length;
         progressTrack.setAttribute('aria-valuenow', current);
 
@@ -153,7 +157,7 @@ async function sendAll() {
     }
 
     progressLabel.textContent = recipients.length + ' of ' + recipients.length;
-    statusEl.textContent = 'Done. ' + sent + ' sent, ' + failed + ' failed.';
+    statusEl.textContent = 'Bulk send complete. ' + sent + ' successfully sent, ' + failed + ' failed.';
 }
 
 sendAll();

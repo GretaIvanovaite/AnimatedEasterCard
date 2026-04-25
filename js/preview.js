@@ -82,3 +82,12 @@ if (logoDataUrl !== '') {
     logoImg.src = logoDataUrl;
     logoImg.hidden = false;
 }
+
+const skipBtn = document.getElementById('btn-skip-anim');
+if (skipBtn) {
+    skipBtn.addEventListener('click', function() {
+        document.getElementById('card-stage').classList.add('skip-animations');
+        skipBtn.hidden = true;
+    });
+}
+

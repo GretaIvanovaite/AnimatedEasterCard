@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/layout.css"/>
     <link rel="stylesheet" href="css/styles.css"/>
     <title>Personalise — Animated Easter Card</title>
 </head>
@@ -11,39 +12,37 @@
         <h1>Easter Card Creator</h1>
     </header>
     <main>
-
-        <nav class="steps" aria-label="Progress steps">
-            <div class="step step--done">
-                <div class="step__dot">&#x2713;</div>
-                <span class="step__label">Details</span>
-            </div>
-            <div class="step-connector step-connector--done"></div>
-            <div class="step step--active">
-                <div class="step__dot">2</div>
-                <span class="step__label">Personalise</span>
-            </div>
-            <div class="step-connector"></div>
-            <div class="step">
-                <div class="step__dot">3</div>
-                <span class="step__label">Preview</span>
-            </div>
-            <div class="step-connector"></div>
-            <div class="step">
-                <div class="step__dot">4</div>
-                <span class="step__label">Send</span>
-            </div>
+        <nav aria-label="Progress steps">
+            <ol>
+                <li data-status="done">
+                    <span>&#x2713;</span>
+                    <span>Details</span>
+                </li>
+                <li aria-current="step">
+                    <span>2</span>
+                    <span>Personalise</span>
+                </li>
+                <li>
+                    <span>3</span>
+                    <span>Preview</span>
+                </li>
+                <li>
+                    <span>4</span>
+                    <span>Send</span>
+                </li>
+            </ol>
         </nav>
 
-        <div class="card">
-            <h2>Confirm data &amp; personalise your card</h2>
+        <section aria-labelledby="personalise-heading">
+            <h2 id="personalise-heading">Confirm data &amp; personalise your card</h2>
             <form action="preview.html" method="get">
                 <label for="emailColumn">Email column</label>
                 <select id="emailColumn" name="emailColumn">
                     <option value="">Select a column...</option>
                 </select>
-                <p id="emailColumn-error" class="error" aria-live="polite" hidden>The selected column does not appear to contain valid email addresses. Please choose a different column.</p>
+                <p id="emailColumn-error" aria-live="polite" hidden>The selected column does not appear to contain valid email addresses. Please choose a different column.</p>
 
-                <label for="nameColumn">Customer name column <span style="font-weight:400">(optional)</span></label>
+                <label for="nameColumn">Customer name column <span>(optional)</span></label>
                 <select id="nameColumn" name="nameColumn">
                     <option value="">None</option>
                 </select>
@@ -59,17 +58,18 @@
                     <option value="dear-name-from-company">Dear {customer name}, from all of us at {company name}</option>
                 </select>
 
-                <div class="buttons">
-                    <p class="help">You will be shown a preview before any cards are sent.</p>
-                    <button type="button" class="back" onclick="history.back()">Back</button>
-                    <button type="submit" class="next">Next</button>
-                </div>
+                <fieldset class="form-actions">
+                    <legend class="sr-only">Form Actions</legend>
+                    <p>You will be shown a preview before any cards are sent.</p>
+                    <button type="button" onclick="history.back()">Back</button>
+                    <button type="submit">Next</button>
+                </fieldset>
             </form>
-        </div>
+        </section>
 
     </main>
     <footer>
-        <small>Portfolio project &mdash; Edge Hill University CIS3413 Advanced Web Portfolio</small>
+        <small>Portfolio project - Edge Hill University CIS3413 Advanced Web Portfolio</small>
     </footer>
     <script src="js/selections.js"></script>
 </body>

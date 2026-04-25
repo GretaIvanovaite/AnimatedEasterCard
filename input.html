@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/layout.css"/>
     <link rel="stylesheet" href="css/styles.css"/>
     <title>Details — Animated Easter Card</title>
 </head>
@@ -11,31 +12,29 @@
         <h1>Easter Card Creator</h1>
     </header>
     <main>
-
-        <nav class="steps" aria-label="Progress steps">
-            <div class="step step--active">
-                <div class="step__dot">1</div>
-                <span class="step__label">Details</span>
-            </div>
-            <div class="step-connector"></div>
-            <div class="step">
-                <div class="step__dot">2</div>
-                <span class="step__label">Personalise</span>
-            </div>
-            <div class="step-connector"></div>
-            <div class="step">
-                <div class="step__dot">3</div>
-                <span class="step__label">Preview</span>
-            </div>
-            <div class="step-connector"></div>
-            <div class="step">
-                <div class="step__dot">4</div>
-                <span class="step__label">Send</span>
-            </div>
+        <nav aria-label="Progress steps">
+            <ol>
+                <li aria-current="step">
+                    <span>1</span>
+                    <span>Details</span>
+                </li>
+                <li>
+                    <span>2</span>
+                    <span>Personalise</span>
+                </li>
+                <li>
+                    <span>3</span>
+                    <span>Preview</span>
+                </li>
+                <li>
+                    <span>4</span>
+                    <span>Send</span>
+                </li>
+            </ol>
         </nav>
 
-        <div class="card">
-            <h2>Enter your details</h2>
+        <section aria-labelledby="details-heading">
+            <h2 id="details-heading">Enter your details</h2>
             <form id="inputForm" action="selections.html" method="get">
                 <label for="inputType">Input type</label>
                 <select id="inputType" name="inputType" aria-required="true">
@@ -46,66 +45,71 @@
                     <option value="xlsx">XLSX</option>
                     <option value="manual">Manual input</option>
                 </select>
-                <p id="inputType-error" class="error" aria-live="polite" hidden>Please select an input type.</p>
+                <p id="inputType-error" aria-live="polite" hidden>Please select an input type.</p>
 
-                <div id="fileOptions" hidden>
+                <fieldset id="fileOptions" hidden>
+                    <legend class="sr-only">File Upload</legend>
                     <label for="fileUpload">Upload file</label>
                     <input id="fileUpload" type="file">
-                    <p id="fileUpload-error" class="error" aria-live="polite" hidden>Please upload a file.</p>
-                </div>
+                    <p id="fileUpload-error" aria-live="polite" hidden>Please upload a file.</p>
+                </fieldset>
 
-                <div id="manualOptions" hidden>
+                <fieldset id="manualOptions" hidden>
+                    <legend class="sr-only">Manual Data Entry</legend>
                     <label for="manualData">Recipient data</label>
-                    <p id="manualData-help" class="help">
+                    <p id="manualData-help">
                         Enter one recipient per line. Email is required, name is optional. Format: email or email, name.
                     </p>
                     <textarea id="manualData" aria-describedby="manualData-help" placeholder="jane@example.com, Jane Smith&#10;john@example.com"></textarea>
-                    <p id="manualData-error" class="error" aria-live="polite" hidden>Please enter at least one recipient. Each line must contain a valid email address.</p>
-                </div>
+                    <p id="manualData-error" aria-live="polite" hidden>Please enter at least one recipient. Each line must start with a valid email address (e.g. name@example.com, Name).</p>
+                </fieldset>
 
                 <label for="message">Message</label>
-                <p id="message-help" class="help">Maximum 400 characters.</p>
-                <textarea id="message" aria-describedby="message-help" placeholder="Thank you for using our services. Happy Easter!" aria-required="true" maxlength="400"></textarea>
-                <p id="message-error" class="error" aria-live="polite" hidden>Please enter a message (maximum 400 characters).</p>
+                <p id="message-help">Maximum 400 characters.</p>
+                <textarea id="message" name="message" aria-describedby="message-help" placeholder="Thank you for using our services. Happy Easter!" aria-required="true" maxlength="400"></textarea>
+                <p id="message-error" aria-live="polite" hidden>Please enter a message (maximum 400 characters).</p>
 
                 <label for="companyName">Your company name</label>
-                <input id="companyName" aria-describedby="companyName-help" type="text" placeholder="Acme Ltd" aria-required="true" maxlength="120">
-                <p id="companyName-error" class="error" aria-live="polite" hidden>Please enter your company name (maximum 60 characters).</p>
+                <input id="companyName" name="companyName" aria-describedby="companyName-help" type="text" placeholder="Acme Ltd" aria-required="true" maxlength="120">
+                <p id="companyName-error" aria-live="polite" hidden>Please enter your company name (maximum 60 characters).</p>
 
                 <label for="emailSubject">Email subject</label>
-                <input id="emailSubject" type="text" placeholder="Happy Easter from Acme Ltd!" aria-required="true" maxlength="120">
-                <p id="emailSubject-error" class="error" aria-live="polite" hidden>Please enter an email subject (maximum 100 characters).</p>
+                <input id="emailSubject" name="emailSubject" type="text" placeholder="Happy Easter from Acme Ltd!" aria-required="true" maxlength="120">
+                <p id="emailSubject-error" aria-live="polite" hidden>Please enter an email subject (maximum 100 characters).</p>
 
-                <label for="companyLogo">Company logo <span style="font-weight:400">(Optional)</span></label>
-                <p id="companyLogo-help" class="help">
+                <label for="companyLogo">Company logo <span>(Optional)</span></label>
+                <p id="companyLogo-help">
                     Upload your logo to display it on the card.
                 </p>
-                <input id="companyLogo" aria-describedby="companyLogo-help" type="file" accept=".jpg,.jpeg,.png,.gif,.webp,.svg,image/*">
+                <input id="companyLogo" name="companyLogo" aria-describedby="companyLogo-help" type="file" accept=".jpg,.jpeg,.png,.gif,.webp,.svg,image/*">
 
-                <label for="url">URL <span style="font-weight:400">(Optional)</span></label>
-                <p id="companyURL-help" class="help">
+                <label for="url">URL <span>(Optional)</span></label>
+                <p id="companyURL-help">
                     Link your customers to your deals or a specific page.
                 </p>
-                <textarea id="url" aria-describedby="companyURL-help" placeholder="https://www.example.com" rows="1"></textarea>
-                <p id="url-error" class="error" aria-live="polite" hidden>Please enter a secure URL starting with https://</p>
+                <textarea id="url" name="url" aria-describedby="companyURL-help" placeholder="https://www.example.com" rows="1"></textarea>
+                <p id="url-error" aria-live="polite" hidden>Please enter a secure URL starting with https://</p>
 
-                <label for="urlCaption">URL caption <span style="font-weight:400">(Optional)</span></label>
-                <p id="URLcaption-help" class="help">
+                <label for="urlCaption">URL caption <span>(Optional)</span></label>
+                <p id="URLcaption-help">
                     A short phrase to caption the link, if provided above.
                 </p>
-                <input id="urlCaption" aria-describedby="URLcaption-help" placeholder="Check out our Easter deals" type="text" maxlength="120">
+                <input id="urlCaption" name="urlCaption" aria-describedby="URLcaption-help" placeholder="Check out our Easter deals" type="text" maxlength="120">
 
-                <div class="buttons">
-                    <p class="help">All required fields must be completed before proceeding.</p>
+                <div id="form-status-announcer" role="status" class="sr-only"></div>
+
+                <fieldset class="form-actions">
+                    <legend class="sr-only">Form Actions</legend>
+                    <p>All required fields must be completed before proceeding.</p>
                     <button type="reset">Clear</button>
-                    <button type="submit" class="next">Next</button>
-                </div>
+                    <button type="submit">Next</button>
+                </fieldset>
             </form>
-        </div>
+        </section>
 
     </main>
     <footer>
-        <small>Portfolio project &mdash; Edge Hill University CIS3413 Advanced Web Portfolio</small>
+        <small>Portfolio project - Edge Hill University CIS3413 Advanced Web Portfolio</small>
     </footer>
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <script src="js/input.js"></script>

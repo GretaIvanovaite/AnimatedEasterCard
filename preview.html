@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/card.css"/>
     <title>Preview — Animated Easter Card</title>
     <style>
+        /* Exact layout overrides from backup preview.html */
         main {
             width: min(760px, 96vw);
             flex-direction: column;
@@ -21,34 +22,35 @@
     </header>
     <main>
 
-        <nav class="steps" aria-label="Progress steps">
-            <div class="step step--done">
-                <div class="step__dot">&#x2713;</div>
-                <span class="step__label">Details</span>
-            </div>
-            <div class="step-connector step-connector--done"></div>
-            <div class="step step--done">
-                <div class="step__dot">&#x2713;</div>
-                <span class="step__label">Personalise</span>
-            </div>
-            <div class="step-connector step-connector--done"></div>
-            <div class="step step--active">
-                <div class="step__dot">3</div>
-                <span class="step__label">Preview</span>
-            </div>
-            <div class="step-connector"></div>
-            <div class="step">
-                <div class="step__dot">4</div>
-                <span class="step__label">Send</span>
-            </div>
+        <!-- Semantic step navigation matching the original look -->
+        <nav aria-label="Progress steps">
+            <ol>
+                <li data-status="done">
+                    <span>&#x2713;</span>
+                    <span>Details</span>
+                </li>
+                <li data-status="done">
+                    <span>&#x2713;</span>
+                    <span>Personalise</span>
+                </li>
+                <li aria-current="step">
+                    <span>3</span>
+                    <span>Preview</span>
+                </li>
+                <li>
+                    <span>4</span>
+                    <span>Send</span>
+                </li>
+            </ol>
         </nav>
 
         <h2>Preview your card</h2>
 
+        <!-- Using section here as in backup to avoid any figure default styling -->
         <section id="card-stage" aria-label="Card preview">
+            <button id="btn-skip-anim" type="button" style="position:absolute; bottom:10px; right:10px; z-index:20; background:rgba(255,255,255,0.8); border:1px solid #ccc; padding:5px 10px; border-radius:4px; cursor:pointer;">Skip Animation</button>
             <img id="card-logo" hidden alt="Company logo">
             <div class="scene" aria-hidden="true">
-
                 <div class="sky"></div>
                 <div class="sun"></div>
                 <div class="cloud cloud--1"></div>
@@ -186,9 +188,7 @@
                         <div class="scroll__roll"></div>
                     </div>
                 </div>
-
             </div>
-
             <p class="sr-only">
                 An animated Easter card preview. A decorated egg rolls in from the left, grows larger, and begins to crack.
                 After shaking and cracking, the top of the egg flies off with a burst of colourful confetti.
@@ -200,7 +200,7 @@
         <form action="sending.html" method="get">
             <div class="buttons">
                 <p class="help">Clicking Confirm will start sending your cards to all recipients.</p>
-                <button type="button" class="back" onclick="history.back()">Back</button>
+                <button type="button" onclick="history.back()">Back</button>
                 <button type="submit" class="next">Confirm &amp; Send</button>
             </div>
         </form>
