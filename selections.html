@@ -56,7 +56,51 @@
                     <option value="dear-name">Dear {customer name},</option>
                     <option value="from-company">From all of us at {company name},</option>
                     <option value="dear-name-from-company">Dear {customer name}, from all of us at {company name}</option>
+                    <option value="custom">Custom phrase...</option>
                 </select>
+
+                <div id="customPhraseContainer" hidden>
+                    <label for="customPhrase">Your custom phrase</label>
+                    <p class="help">Use {customer name} or {company name} to include them in your text.</p>
+                    <textarea id="customPhrase" name="customPhrase" placeholder="Happy Easter to everyone at {company name}!"></textarea>
+                </div>
+
+                <fieldset id="reorderSection">
+                    <legend>Order your text</legend>
+                    <p class="help">Use the buttons to change the order of items on your card.</p>
+                    <ol id="messageOrder" class="reorder-list">
+                        <li data-id="phrase">
+                            <span>Opening Phrase</span>
+                            <div class="reorder-buttons">
+                                <button type="button" class="btn-up" aria-label="Move phrase up">&#9650;</button>
+                                <button type="button" class="btn-down" aria-label="Move phrase down">&#9660;</button>
+                            </div>
+                        </li>
+                        <li data-id="message">
+                            <span>Message</span>
+                            <div class="reorder-buttons">
+                                <button type="button" class="btn-up" aria-label="Move message up">&#9650;</button>
+                                <button type="button" class="btn-down" aria-label="Move message down">&#9660;</button>
+                            </div>
+                        </li>
+                        <li data-id="company">
+                            <span>Company Name</span>
+                            <div class="reorder-buttons">
+                                <button type="button" class="btn-up" aria-label="Move company name up">&#9650;</button>
+                                <button type="button" class="btn-down" aria-label="Move company name down">&#9660;</button>
+                            </div>
+                        </li>
+                    </ol>
+                </fieldset>
+
+                <section id="previewSection">
+                    <h3>Live Text Preview</h3>
+                    <div id="livePreviewContainer">
+                        <div id="livePreviewScroll" aria-live="polite">
+                            <!-- content injected via JS -->
+                        </div>
+                    </div>
+                </section>
 
                 <fieldset class="form-actions">
                     <legend class="sr-only">Form Actions</legend>

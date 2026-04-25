@@ -139,7 +139,7 @@ function formSubmit(submitEvent) {
             const line = lines[i].trim();
             if (line !== '') {
                 const parts = line.split(',');
-                const email = parts[0].trim();
+                const email = parts[0] ? parts[0].trim() : '';
                 if (!isValidEmail(email)) {
                     manualValid = false;
                 } else {
@@ -150,14 +150,22 @@ function formSubmit(submitEvent) {
 
         if (!manualValid || validLines.length === 0) {
             const err = document.getElementById('manualData-error');
-            err.hidden = false;
+            if (err) err.hidden = false;
             document.getElementById('manualData').setAttribute('aria-invalid', 'true');
             document.getElementById('manualData').setAttribute('aria-describedby', 'manualData-error');
             valid = false;
         } else {
-            document.getElementById('manualData-error').hidden = true;
+            const err = document.getElementById('manualData-error');
+            if (err) err.hidden = true;
             sessionStorage.setItem('uploadedFile', validLines.join('\n'));
             sessionStorage.setItem('uploadedFileName', 'manual');
+        }
+    } else {
+        // If not manual, ensure we haven't accidentally left 'manual' in the filename
+        // if the user switched back to file upload
+        const fileInput = document.getElementById('fileUpload');
+        if (fileInput && fileInput.files.length > 0) {
+            sessionStorage.setItem('uploadedFileName', fileInput.files[0].name);
         }
     }
 
@@ -211,6 +219,14 @@ function formSubmit(submitEvent) {
     }
 
     if (valid) {
+        // Ensure manual data is saved one last time if manual was chosen
+        if (dropdownChoice === 'manual') {
+            const text = document.getElementById('manualData').value;
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l !== '');
+            sessionStorage.setItem('uploadedFile', lines.join('\n'));
+            sessionStorage.setItem('uploadedFileName', 'manual');
+        }
+
         sessionStorage.setItem('companyName', companyName);
         sessionStorage.setItem('message', message);
         sessionStorage.setItem('emailSubject', emailSubject);

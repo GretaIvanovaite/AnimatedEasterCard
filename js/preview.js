@@ -1,6 +1,8 @@
 const params = new URLSearchParams(window.location.search);
-const openingPhraseValue = params.get('openingPhrase') || 'happy-easter';
-const nameColumn = params.get('nameColumn');
+const openingPhraseValue = params.get('openingPhrase') || sessionStorage.getItem('openingPhrase') || 'happy-easter';
+const customPhrase = params.get('customPhrase') || sessionStorage.getItem('customPhrase') || '';
+const nameColumn = params.get('nameColumn') || sessionStorage.getItem('nameColumn');
+const orderParam = params.get('order') || sessionStorage.getItem('messageOrder') || 'phrase,message,company';
 
 const companyName = sessionStorage.getItem('companyName') || '';
 const message = sessionStorage.getItem('message') || '';
@@ -53,20 +55,28 @@ function getExampleName() {
     return '';
 }
 
-let phraseText = phraseMap[openingPhraseValue] || '';
-phraseText = phraseText.replace('{company name}', companyName);
-phraseText = phraseText.replace('{customer name}', getExampleName() || 'Customer');
+let phraseText = '';
+if (openingPhraseValue === 'custom') {
+    phraseText = customPhrase;
+} else {
+    phraseText = phraseMap[openingPhraseValue] || '';
+}
+
+phraseText = phraseText.replace(/{company name}/g, companyName);
+phraseText = phraseText.replace(/{customer name}/g, getExampleName() || 'Customer');
 
 const lines = [];
-if (phraseText !== '') {
-    lines.push(phraseText);
-}
-if (message !== '') {
-    lines.push(message);
-}
-if (companyName !== '') {
-    lines.push(companyName);
-}
+const order = orderParam.split(',');
+
+order.forEach(id => {
+    if (id === 'phrase' && phraseText !== '') {
+        lines.push(phraseText);
+    } else if (id === 'message' && message !== '') {
+        lines.push(message);
+    } else if (id === 'company' && companyName !== '') {
+        lines.push(companyName);
+    }
+});
 document.getElementById('card-message').textContent = lines.join('\n');
 
 const cardLink = document.getElementById('card-link');

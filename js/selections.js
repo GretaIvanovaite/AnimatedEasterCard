@@ -1,280 +1,207 @@
-function getColumns() {
-    const fileContent = sessionStorage.getItem('uploadedFile');
-    const fileName = sessionStorage.getItem('uploadedFileName');
-    const columns = [];
+/* 
+ * selections.js 
+ * Handles data confirmation, content reordering, and live preview.
+ */
 
-    if (!fileContent) {
+'use strict';
+
+(function() {
+    const params = new URLSearchParams(window.location.search);
+    
+    // Elements
+    const emailSelect = document.getElementById('emailColumn');
+    const nameSelect = document.getElementById('nameColumn');
+    const phraseSelect = document.getElementById('openingPhrase');
+    const customContainer = document.getElementById('customPhraseContainer');
+    const customTextarea = document.getElementById('customPhrase');
+    const livePreview = document.getElementById('livePreviewScroll');
+    const orderList = document.getElementById('messageOrder');
+    const form = document.querySelector('form');
+
+    // Data fallbacks (Session vs URL)
+    const fileContent = sessionStorage.getItem('uploadedFile') || params.get('manualData') || '';
+    const fileName = sessionStorage.getItem('uploadedFileName') || (params.has('manualData') ? 'manual' : '');
+    const companyName = sessionStorage.getItem('companyName') || params.get('companyName') || '{company name}';
+    const storedMessage = sessionStorage.getItem('message') || params.get('message') || '';
+
+    /**
+     * Parse the uploaded file or manual data to find columns.
+     */
+    function getColumns() {
+        const columns = [];
+        if (!fileContent || !fileName) return columns;
+
+        let extension = '';
+        if (fileName !== 'manual') {
+            const nameParts = fileName.split('.');
+            extension = nameParts[nameParts.length - 1].toLowerCase();
+        }
+
+        if (extension === 'json') {
+            try {
+                const data = JSON.parse(fileContent);
+                if (data.length > 0) {
+                    Object.keys(data[0]).forEach(key => {
+                        columns.push({ label: key + ' (' + data[0][key] + ')', value: key });
+                    });
+                }
+            } catch (e) { console.error('JSON Parse Error', e); }
+        } else {
+            const lines = fileContent.split('\n').map(l => l.trim()).filter(l => l !== '');
+            if (lines.length === 0) return columns;
+
+            const cells = lines[0].split(',');
+            cells.forEach((cell, i) => {
+                const val = cell.trim();
+                if (val) columns.push({ label: (fileName === 'manual' ? 'Column ' + (i+1) : 'Header: ' + val) + ' (' + val + ')', value: i });
+            });
+            // Fallback for single cell
+            if (columns.length === 0 && cells[0]) columns.push({ label: 'Column 1 (' + cells[0] + ')', value: 0 });
+        }
         return columns;
     }
 
-    const nameParts = fileName.split('.');
-    const extension = nameParts[nameParts.length - 1].toLowerCase();
-
-    if (extension === 'json') {
-        const data = JSON.parse(fileContent);
-        const firstRow = data[0];
-        const keys = Object.keys(firstRow);
-
-        for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            const example = firstRow[key];
-            columns.push({ label: key + ' (' + example + ')', value: key });
-        }
-    } else {
-        const lines = fileContent.split('\n');
-
-        if (fileName === 'manual') {
-            const exampleParts = lines[0].split(',');
-
-            for (let i = 0; i < exampleParts.length; i++) {
-                const example = exampleParts[i].trim();
-                columns.push({ label: 'Column ' + (i + 1) + ' (' + example + ')', value: i });
-            }
-        } else {
-            const headers = lines[0].split(',');
-            const exampleParts = lines.length > 1 ? lines[1].split(',') : [];
-
-            for (let i = 0; i < headers.length; i++) {
-                const header = headers[i].trim();
-                const example = exampleParts[i] ? exampleParts[i].trim() : '';
-
-                if (example !== '') {
-                    columns.push({ label: header + ' (' + example + ')', value: i });
-                } else {
-                    columns.push({ label: header, value: i });
-                }
-            }
-        }
+    /**
+     * Populate the Email and Name dropdowns.
+     */
+    function populateDropdowns() {
+        const columns = getColumns();
+        columns.forEach(col => {
+            const opt1 = new Option(col.label, col.value);
+            const opt2 = new Option(col.label, col.value);
+            emailSelect.add(opt1);
+            nameSelect.add(opt2);
+        });
     }
 
-    return columns;
-}
+    /**
+     * Extracts an example name based on the selected column.
+     */
+    function getExampleName() {
+        const colIdx = nameSelect.value;
+        if (colIdx === '' || !fileContent) return '';
 
-function populateDropdowns() {
-    const columns = getColumns();
-    const emailSelect = document.getElementById('emailColumn');
-    const nameSelect = document.getElementById('nameColumn');
-
-    for (let i = 0; i < columns.length; i++) {
-        const emailOption = document.createElement('option');
-        emailOption.value = columns[i].value;
-        emailOption.textContent = columns[i].label;
-        emailSelect.appendChild(emailOption);
-
-        const nameOption = document.createElement('option');
-        nameOption.value = columns[i].value;
-        nameOption.textContent = columns[i].label;
-        nameSelect.appendChild(nameOption);
-    }
-}
-
-populateDropdowns();
-
-const params = new URLSearchParams(window.location.search);
-const companyName = params.get('companyName') || '{company name}';
-
-const openingPhrase = document.getElementById('openingPhrase');
-const customerNameOptions = [];
-
-for (let i = 0; i < openingPhrase.options.length; i++) {
-    const option = openingPhrase.options[i];
-    option.textContent = option.textContent.replace('{company name}', companyName);
-
-    if (option.textContent.indexOf('{customer name}') !== -1) {
-        customerNameOptions.push(option);
-    }
-}
-
-for (let i = 0; i < customerNameOptions.length; i++) {
-    openingPhrase.removeChild(customerNameOptions[i]);
-}
-
-function nameColumnChange() {
-    const nameSelected = document.getElementById('nameColumn').value;
-
-    if (nameSelected !== '') {
-        for (let i = 0; i < customerNameOptions.length; i++) {
-            openingPhrase.appendChild(customerNameOptions[i]);
-        }
-    } else {
-        for (let i = 0; i < customerNameOptions.length; i++) {
-            if (customerNameOptions[i].parentNode === openingPhrase) {
-                openingPhrase.removeChild(customerNameOptions[i]);
-            }
-        }
-
-        const currentValue = openingPhrase.value;
-        let currentStillExists = false;
-        for (let i = 0; i < openingPhrase.options.length; i++) {
-            if (openingPhrase.options[i].value === currentValue) {
-                currentStillExists = true;
-                break;
-            }
-        }
-        if (!currentStillExists) {
-            openingPhrase.selectedIndex = 0;
-        }
-    }
-}
-
-document.getElementById('nameColumn').addEventListener('change', nameColumnChange);
-
-document.querySelector('form').addEventListener('submit', function() {
-    sessionStorage.setItem('openingPhrase', document.getElementById('openingPhrase').value);
-    sessionStorage.setItem('emailColumn', document.getElementById('emailColumn').value);
-    sessionStorage.setItem('nameColumn', document.getElementById('nameColumn').value);
-});
-
-function getColumnValues(columnValue) {
-    const fileContent = sessionStorage.getItem('uploadedFile');
-    const fileName = sessionStorage.getItem('uploadedFileName');
-    const values = [];
-
-    if (!fileContent) {
-        return values;
-    }
-
-    const nameParts = fileName.split('.');
-    const extension = nameParts[nameParts.length - 1].toLowerCase();
-
-    if (extension === 'json') {
-        const data = JSON.parse(fileContent);
-        for (let i = 0; i < data.length; i++) {
-            const value = data[i][columnValue];
-            if (value !== undefined && value !== '') {
-                values.push(String(value).trim());
-            }
-        }
-    } else {
-        const lines = fileContent.split('\n');
+        const lines = fileContent.split('\n').map(l => l.trim()).filter(l => l !== '');
         const startRow = fileName === 'manual' ? 0 : 1;
-
+        
         for (let i = startRow; i < lines.length; i++) {
-            const line = lines[i].trim();
-            if (line !== '') {
-                const parts = line.split(',');
-                const value = parts[columnValue] ? parts[columnValue].trim() : '';
-                if (value !== '') {
-                    values.push(value);
+            const parts = lines[i].split(',');
+            if (parts[colIdx]) return parts[colIdx].trim();
+        }
+        return '';
+    }
+
+    /**
+     * Updates the text box on the page to show what the card will look like.
+     */
+    function updateLivePreview() {
+        let phraseText = '';
+        if (phraseSelect.value === 'custom') {
+            phraseText = customTextarea.value || 'Your custom phrase...';
+        } else {
+            phraseText = phraseSelect.options[phraseSelect.selectedIndex].textContent;
+        }
+
+        // Placeholders
+        phraseText = phraseText.replace(/{company name}/g, companyName);
+        phraseText = phraseText.replace(/{customer name}/g, getExampleName() || 'Customer');
+
+        // Ordering
+        const order = Array.from(orderList.children).map(li => li.dataset.id);
+        const lines = [];
+        order.forEach(id => {
+            if (id === 'phrase' && phraseText) lines.push(phraseText);
+            if (id === 'message' && storedMessage) lines.push(storedMessage);
+            if (id === 'company' && companyName && companyName !== '{company name}') lines.push(companyName);
+        });
+
+        if (livePreview) livePreview.textContent = lines.join('\n');
+    }
+
+    /**
+     * Shows/hides phrase options that require a customer name.
+     */
+    function toggleNameOptions() {
+        const hasName = nameSelect.value !== '';
+        Array.from(phraseSelect.options).forEach(opt => {
+            if (opt.textContent.includes('{customer name}')) {
+                opt.hidden = !hasName;
+                opt.disabled = !hasName;
+                // If a hidden option was selected, reset to default
+                if (!hasName && phraseSelect.value === opt.value) {
+                    phraseSelect.value = 'happy-easter';
                 }
             }
+        });
+    }
+
+    // --- EVENT LISTENERS ---
+
+    phraseSelect.addEventListener('change', function() {
+        customContainer.hidden = (this.value !== 'custom');
+        updateLivePreview();
+    });
+
+    customTextarea.addEventListener('input', updateLivePreview);
+    
+    nameSelect.addEventListener('change', function() {
+        toggleNameOptions();
+        updateLivePreview();
+    });
+
+    orderList.addEventListener('click', (e) => {
+        const btn = e.target;
+        if (!btn.matches('.btn-up, .btn-down')) return;
+        const li = btn.closest('li');
+        if (btn.classList.contains('btn-up')) {
+            if (li.previousElementSibling) orderList.insertBefore(li, li.previousElementSibling);
+        } else {
+            if (li.nextElementSibling) orderList.insertBefore(li.nextElementSibling, li);
         }
-    }
+        updateLivePreview();
+    });
 
-    return values;
-}
+    // --- INITIALIZATION ---
 
-function isValidEmail(email) {
-    const parts = email.split('@');
-    if (parts.length !== 2) {
-        return false;
-    }
-    if (parts[0] === '' || parts[1] === '') {
-        return false;
-    }
-    if (parts[1].indexOf('.') === -1) {
-        return false;
-    }
-    return true;
-}
+    // Clean up phrase options (replaces placeholders in dropdown text)
+    Array.from(phraseSelect.options).forEach(opt => {
+        opt.textContent = opt.textContent.replace('{company name}', companyName);
+    });
 
-function emailColumnValidation() {
-    const columnValue = document.getElementById('emailColumn').value;
-    const error = document.getElementById('emailColumn-error');
-    const emailSelect = document.getElementById('emailColumn');
+    populateDropdowns();
+    toggleNameOptions();
+    updateLivePreview();
 
-    if (columnValue === '') {
-        error.hidden = true;
-        emailSelect.removeAttribute('aria-invalid');
-        emailSelect.removeAttribute('aria-describedby');
-        return false;
-    }
+    // --- FORM SUBMISSION ---
 
-    const values = getColumnValues(columnValue);
-    let allValid = true;
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
 
-    for (let i = 0; i < values.length; i++) {
-        if (!isValidEmail(values[i])) {
-            allValid = false;
-            break;
+        // Basic validation for email column
+        if (emailSelect.value === '') {
+            const err = document.getElementById('emailColumn-error');
+            err.hidden = false;
+            return;
         }
-    }
 
-    if (!allValid || values.length === 0) {
-        error.hidden = false;
-        emailSelect.setAttribute('aria-invalid', 'true');
-        emailSelect.setAttribute('aria-describedby', 'emailColumn-error');
-        return false;
-    }
+        // Save state
+        const orderString = Array.from(orderList.children).map(li => li.dataset.id).join(',');
+        sessionStorage.setItem('openingPhrase', phraseSelect.value);
+        sessionStorage.setItem('customPhrase', customTextarea.value);
+        sessionStorage.setItem('emailColumn', emailSelect.value);
+        sessionStorage.setItem('nameColumn', nameSelect.value);
+        sessionStorage.setItem('messageOrder', orderString);
 
-    error.hidden = true;
-    emailSelect.removeAttribute('aria-invalid');
-    emailSelect.removeAttribute('aria-describedby');
-    return true;
-}
+        // Redirect with full parameters
+        const nextParams = new URLSearchParams();
+        nextParams.append('openingPhrase', phraseSelect.value);
+        nextParams.append('customPhrase', customTextarea.value);
+        nextParams.append('emailColumn', emailSelect.value);
+        nextParams.append('nameColumn', nameSelect.value);
+        nextParams.append('order', orderString);
+        if (params.has('companyName')) nextParams.append('companyName', companyName);
 
-document.getElementById('emailColumn').addEventListener('change', emailColumnValidation);
+        window.location.href = 'preview.html?' + nextParams.toString();
+    });
 
-// Create announcer element
-const statusAnnouncer = document.createElement('div');
-statusAnnouncer.setAttribute('role', 'status');
-statusAnnouncer.style.position = 'absolute';
-statusAnnouncer.style.width = '1px';
-statusAnnouncer.style.height = '1px';
-statusAnnouncer.style.padding = '0';
-statusAnnouncer.style.margin = '-1px';
-statusAnnouncer.style.overflow = 'hidden';
-statusAnnouncer.style.clip = 'rect(0, 0, 0, 0)';
-statusAnnouncer.style.whiteSpace = 'nowrap';
-statusAnnouncer.style.border = '0';
-document.body.appendChild(statusAnnouncer);
-
-document.querySelector('form').addEventListener('submit', function(submitEvent) {
-    const emailSelected = document.getElementById('emailColumn').value;
-    let valid = true;
-
-    if (emailSelected === '') {
-        const err = document.getElementById('emailColumn-error');
-        err.hidden = false;
-        err.textContent = 'Please select an email column.';
-        document.getElementById('emailColumn').setAttribute('aria-invalid', 'true');
-        document.getElementById('emailColumn').setAttribute('aria-describedby', 'emailColumn-error');
-        valid = false;
-    } else {
-        if (!emailColumnValidation()) {
-            valid = false;
-        }
-    }
-
-    if (!valid) {
-        submitEvent.preventDefault();
-        statusAnnouncer.textContent = 'Please correct the errors in the form.';
-    } else {
-        submitEvent.preventDefault();
-        
-        const openingPhrase = document.getElementById('openingPhrase').value;
-        const emailColumn = document.getElementById('emailColumn').value;
-        const nameColumn = document.getElementById('nameColumn').value;
-
-        sessionStorage.setItem('openingPhrase', openingPhrase);
-        sessionStorage.setItem('emailColumn', emailColumn);
-        sessionStorage.setItem('nameColumn', nameColumn);
-        
-        statusAnnouncer.textContent = 'Personalisation saved! Loading preview...';
-        
-        setTimeout(() => {
-            const queryParams = new URLSearchParams();
-            queryParams.append('openingPhrase', openingPhrase);
-            queryParams.append('emailColumn', emailColumn);
-            queryParams.append('nameColumn', nameColumn);
-            
-            // Also preserve companyName if it was in the current URL
-            const currentParams = new URLSearchParams(window.location.search);
-            if (currentParams.has('companyName')) {
-                queryParams.append('companyName', currentParams.get('companyName'));
-            }
-
-            window.location.href = 'preview.html?' + queryParams.toString();
-        }, 1000);
-    }
-});
+})();
