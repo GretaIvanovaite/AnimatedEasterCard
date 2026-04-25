@@ -1,0 +1,180 @@
+/* ============================================================
+   SPRING GARDEN BLOOMING ANIMATION THEME
+============================================================ */
+
+/* ── Seeds (0.5s - 2.0s) ────────────────────────────────────── */
+.seed {
+    position: absolute;
+    top: -20px;
+    width: 6px;
+    height: 10px;
+    background: #FFD93D;
+    border-radius: 50%;
+    filter: blur(1px);
+    opacity: 0;
+}
+
+.seed--1 { left: 25%; animation: seed-drop 1.0s ease-in 0.5s forwards; }
+.seed--2 { left: 50%; animation: seed-drop 1.2s ease-in 0.7s forwards; }
+.seed--3 { left: 75%; animation: seed-drop 1.0s ease-in 0.9s forwards; }
+.seed--4 { left: 15%; animation: seed-drop 1.1s ease-in 0.4s forwards; }
+.seed--5 { left: 40%; animation: seed-drop 1.3s ease-in 0.6s forwards; }
+.seed--6 { left: 60%; animation: seed-drop 1.2s ease-in 0.8s forwards; }
+.seed--7 { left: 85%; animation: seed-drop 1.0s ease-in 1.0s forwards; }
+
+@keyframes seed-drop {
+    0%   { transform: translateY(0); opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(350px); opacity: 0; }
+}
+
+/* ── Flowers (Stems & Leaves) ──────────────────────────────── */
+.garden-flower {
+    position: absolute;
+    bottom: 29.5%;
+    width: 100px;
+    height: 180px; /* Base height for foreground */
+    transform-origin: bottom center;
+}
+
+/* Foreground Flowers */
+.garden-flower--1 { left: 15%; z-index: 10; }
+.garden-flower--2 { left: 50%; transform: translateX(-50%); z-index: 20; height: 220px; }
+.garden-flower--3 { left: 75%; z-index: 10; }
+
+/* Background Flowers */
+.garden-flower--4 { left: 5%;  z-index: 5; transform: scale(0.7); height: 140px; filter: brightness(0.9); }
+.garden-flower--5 { left: 35%; z-index: 5; transform: scale(0.8); height: 160px; filter: brightness(0.9); }
+.garden-flower--6 { left: 65%; z-index: 5; transform: scale(0.75); height: 150px; filter: brightness(0.9); }
+.garden-flower--7 { left: 90%; z-index: 5; transform: scale(0.65); height: 130px; filter: brightness(0.9); }
+
+.stem {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleY(0);
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(to top, #3d8e44, #5ab560);
+    transform-origin: bottom center;
+}
+
+.garden-flower--1 .stem { animation: grow-stem 1.5s ease-out 1.5s forwards; }
+.garden-flower--2 .stem { animation: grow-stem 1.5s ease-out 1.7s forwards; }
+.garden-flower--3 .stem { animation: grow-stem 1.5s ease-out 1.6s forwards; }
+.garden-flower--4 .stem { animation: grow-stem 1.2s ease-out 1.4s forwards; }
+.garden-flower--5 .stem { animation: grow-stem 1.2s ease-out 1.6s forwards; }
+.garden-flower--6 .stem { animation: grow-stem 1.2s ease-out 1.8s forwards; }
+.garden-flower--7 .stem { animation: grow-stem 1.2s ease-out 2.0s forwards; }
+
+@keyframes grow-stem { to { transform: translateX(-50%) scaleY(1); } }
+
+/* Leaves */
+.leaf {
+    position: absolute;
+    width: 25px;
+    height: 12px;
+    background: #5ab560;
+    border-radius: 0 100% 0 100%;
+    opacity: 0;
+    transform-origin: left center;
+}
+
+.leaf--left  { left: 50%; transform: rotate(-30deg) scale(0); --rot: -30deg; top: 60%; }
+.leaf--right { left: 50%; transform: rotate(150deg) scale(0); --rot: 150deg; top: 45%; border-radius: 100% 0 100% 0; }
+
+.garden-flower .leaf { animation: unfurl-leaf 0.8s ease-out forwards; }
+.garden-flower--1 .leaf--left  { animation-delay: 2.2s; }
+.garden-flower--1 .leaf--right { animation-delay: 2.4s; }
+.garden-flower--2 .leaf--left  { animation-delay: 2.5s; }
+.garden-flower--2 .leaf--right { animation-delay: 2.7s; }
+.garden-flower--3 .leaf--left  { animation-delay: 2.3s; }
+.garden-flower--3 .leaf--right { animation-delay: 2.5s; }
+
+@keyframes unfurl-leaf { to { opacity: 1; transform: rotate(var(--rot)) scale(1); } }
+
+/* ── The Bloom (3s - 6s) ────────────────────────────────────── */
+.bloom {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%) scale(0); /* Anchored to stem top */
+    width: 80px;
+    height: 80px;
+    transform-origin: center center;
+    opacity: 0;
+}
+
+.garden-flower--2 .bloom { width: 120px; height: 120px; }
+
+.garden-flower .bloom { animation: bloom-appear 1.0s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards; }
+.garden-flower--1 .bloom { animation-delay: 3.0s; }
+.garden-flower--2 .bloom { animation-delay: 3.5s; }
+.garden-flower--3 .bloom { animation-delay: 3.2s; }
+.garden-flower--4 .bloom { animation-delay: 2.8s; transform: translateX(-50%) translateY(-50%) scale(0) rotate(15deg); }
+.garden-flower--5 .bloom { animation-delay: 3.1s; }
+.garden-flower--6 .bloom { animation-delay: 3.4s; }
+.garden-flower--7 .bloom { animation-delay: 3.7s; }
+
+@keyframes bloom-appear { to { opacity: 1; transform: translateX(-50%) translateY(-50%) scale(1); } }
+
+.petal {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, #ff6fa8, #ffb6d9);
+    clip-path: ellipse(20% 50% at 50% 50%);
+    transform-origin: bottom center;
+    /* Start state: Closed bud */
+    transform: rotate(0deg) scaleX(0.4) scaleY(0.7);
+    transition: transform 1.5s ease-out;
+}
+
+.garden-flower--2 .petal { background: radial-gradient(circle at center, #FFD93D, #FF6B6B); }
+.garden-flower--4 .petal, .garden-flower--6 .petal { background: radial-gradient(circle at center, #A0C7E3, #BBDEFB); }
+.garden-flower--5 .petal, .garden-flower--7 .petal { background: radial-gradient(circle at center, #E5E1EE, #cc5de8); }
+
+/* Petal Distribution */
+.petal:nth-child(1) { --r: 0deg; }
+.petal:nth-child(2) { --r: 45deg; }
+.petal:nth-child(3) { --r: 90deg; }
+.petal:nth-child(4) { --r: 135deg; }
+.petal:nth-child(5) { --r: 180deg; }
+.petal:nth-child(6) { --r: 225deg; }
+.petal:nth-child(7) { --r: 270deg; }
+.petal:nth-child(8) { --r: 315deg; }
+
+/* Blooming Animation: Fanning out the petals */
+.garden-flower .petal { animation: fan-out 2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+.garden-flower--1 .petal { animation-delay: 4.0s; }
+.garden-flower--2 .petal { animation-delay: 4.5s; }
+.garden-flower--3 .petal { animation-delay: 4.2s; }
+.garden-flower--4 .petal { animation-delay: 3.8s; }
+.garden-flower--5 .petal { animation-delay: 4.1s; }
+.garden-flower--6 .petal { animation-delay: 4.4s; }
+.garden-flower--7 .petal { animation-delay: 4.7s; }
+
+@keyframes fan-out {
+    0%   { transform: rotate(0deg) scaleX(0.4) scaleY(0.7); }
+    100% { transform: rotate(var(--r)) scale(1); }
+}
+
+/* ── The Scroll (7.0s+) ────────────────────────────────────── */
+.garden-flower--2 .scroll-container {
+    bottom: 50%;
+    z-index: 100; /* Ensure it is in front of petals */
+    animation:
+        garden-scroll-appear 1.5s ease-out 7.0s forwards,
+        scroll-zoom 3.5s ease-in-out 11.5s forwards;
+}
+
+@keyframes garden-scroll-appear {
+    0%   { opacity: 0; transform: translateX(-50%) translateY(50px) scale(0.3); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+.garden-flower--2 .scroll__paper {
+    animation: scroll-unroll 2.2s ease-out 8.5s forwards;
+}
+
+/* Ensure font scaler is triggered - fitScrollText is called in card.js after 50ms */

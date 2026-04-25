@@ -123,6 +123,13 @@ h2 {
     margin-bottom: var(--space-l);
 }
 
+h3 {
+    font-size: 1.15rem;
+    font-weight: var(--font-weight-bold);
+    margin-top: var(--space-l);
+    margin-bottom: var(--space-s);
+}
+
 main {
     width: min(640px, 92vw);
     margin: var(--space-xl) auto;
@@ -319,11 +326,14 @@ button {
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    padding: 0.6rem var(--space-xl);
+    padding: 0.6rem var(--space-m); /* Reduced from space-xl for better fit */
     border-radius: var(--border-radius-pill);
     border: none;
     cursor: pointer;
     transition: all 0.15s;
+    white-space: normal; /* Allow text wrapping */
+    line-height: 1.2;
+    min-width: 7rem;
 }
 
 button[type="submit"] { background-color: var(--colour-confirm); color: var(--colour-text); }
@@ -362,10 +372,11 @@ main > section:last-of-type:not(:has(form)) article {
     padding: var(--space-l) var(--space-m);
 }
 
-/* =====================================================================
-   ACCESSIBILITY UTILITY
-   ===================================================================== */
-.sr-only {
+@media (max-width: 600px) {
+    main > section:last-of-type:not(:has(form)) {
+        grid-template-columns: 1fr;
+    }
+}
     position: absolute;
     width: 1px;
     height: 1px;

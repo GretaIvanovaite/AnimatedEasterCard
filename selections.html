@@ -59,39 +59,65 @@
                     <option value="custom">Custom phrase...</option>
                 </select>
 
-                <div id="customPhraseContainer" hidden>
+                <div id="customPhraseContainer" hidden="">
                     <label for="customPhrase">Your custom phrase</label>
                     <p class="help">Use {customer name} or {company name} to include them in your text.</p>
                     <textarea id="customPhrase" name="customPhrase" placeholder="Happy Easter to everyone at {company name}!"></textarea>
                 </div>
 
-                <fieldset id="reorderSection">
-                    <legend>Order your text</legend>
-                    <p class="help">Use the buttons to change the order of items on your card.</p>
-                    <ol id="messageOrder" class="reorder-list">
-                        <li data-id="phrase">
-                            <span>Opening Phrase</span>
-                            <div class="reorder-buttons">
-                                <button type="button" class="btn-up" aria-label="Move phrase up">&#9650;</button>
-                                <button type="button" class="btn-down" aria-label="Move phrase down">&#9660;</button>
-                            </div>
-                        </li>
-                        <li data-id="message">
-                            <span>Message</span>
-                            <div class="reorder-buttons">
-                                <button type="button" class="btn-up" aria-label="Move message up">&#9650;</button>
-                                <button type="button" class="btn-down" aria-label="Move message down">&#9660;</button>
-                            </div>
-                        </li>
-                        <li data-id="company">
-                            <span>Company Name</span>
-                            <div class="reorder-buttons">
-                                <button type="button" class="btn-up" aria-label="Move company name up">&#9650;</button>
-                                <button type="button" class="btn-down" aria-label="Move company name down">&#9660;</button>
-                            </div>
-                        </li>
-                    </ol>
-                </fieldset>
+                <section id="themeSection">
+                    <h3>Choose an animation style</h3>
+                    <fieldset>
+                        <legend class="sr-only">Animation theme selection</legend>
+                        <div class="theme-options">
+                            <label class="theme-option">
+                                <input type="radio" name="animTheme" value="bunny" checked>
+                                <span class="theme-card">
+                                    <strong>Easter Bunny</strong>
+                                    <small>A playful bunny climbing out of a cracking egg.</small>
+                                </span>
+                            </label>
+                            <label class="theme-option">
+                                <input type="radio" name="animTheme" value="garden">
+                                <span class="theme-card">
+                                    <strong>Spring Garden</strong>
+                                    <small>Elegant flowers blooming and opening in the sun.</small>
+                                </span>
+                            </label>
+                        </div>
+                    </fieldset>
+                </section>
+
+                <section id="reorderSection">
+                    <h3>Order your text</h3>
+                    <fieldset>
+                        <legend class="sr-only">Message ordering</legend>
+                        <p class="help">Use the buttons to change the order of items on your card.</p>
+                        <ol id="messageOrder" class="reorder-list">
+                            <li data-id="phrase">
+                                <span>Opening Phrase</span>
+                                <div class="reorder-buttons">
+                                    <button type="button" class="btn-up" aria-label="Move phrase up">&#9650;</button>
+                                    <button type="button" class="btn-down" aria-label="Move phrase down">&#9660;</button>
+                                </div>
+                            </li>
+                            <li data-id="message">
+                                <span>Message</span>
+                                <div class="reorder-buttons">
+                                    <button type="button" class="btn-up" aria-label="Move message up">&#9650;</button>
+                                    <button type="button" class="btn-down" aria-label="Move message down">&#9660;</button>
+                                </div>
+                            </li>
+                            <li data-id="company">
+                                <span>Company Name</span>
+                                <div class="reorder-buttons">
+                                    <button type="button" class="btn-up" aria-label="Move company name up">&#9650;</button>
+                                    <button type="button" class="btn-down" aria-label="Move company name down">&#9660;</button>
+                                </div>
+                            </li>
+                        </ol>
+                    </fieldset>
+                </section>
 
                 <section id="previewSection">
                     <h3>Live Text Preview</h3>

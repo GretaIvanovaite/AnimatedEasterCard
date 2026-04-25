@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css"/>
-    <link rel="stylesheet" href="css/card.css"/>
+    <link rel="stylesheet" href="css/card-shared.css"/>
     <title>Happy Easter!</title>
 </head>
 <body>
@@ -14,180 +14,12 @@
     <main>
         <section id="card-stage" aria-label="Animated Easter card">
             <div class="scene" aria-hidden="true">
-
-                <!-- Sky and clouds — drawn first, behind everything -->
-                <div class="sky"></div>
-                <div class="sun"></div>
-                <div class="cloud cloud--1"></div>
-                <div class="cloud cloud--2"></div>
-
-                <!--
-                    BUNNY drawn before the ground, grass and egg-scene.
-                    The ground (below) renders IN FRONT of the bunny, so the
-                    green earth masks the bunny's lower body while it rises —
-                    it only becomes visible once it climbs above soil level.
-                    Grass and egg-scene (later still) also render in front.
-                -->
-                <div class="bunny">
-                    <div class="bunny__ears">
-                        <div class="bunny__ear bunny__ear--left"></div>
-                        <div class="bunny__ear bunny__ear--right"></div>
-                    </div>
-                    <div class="bunny__head">
-                        <div class="bunny__eye bunny__eye--left"></div>
-                        <div class="bunny__eye bunny__eye--right"></div>
-                        <div class="bunny__nose"></div>
-                        <div class="bunny__mouth"></div>
-                    </div>
-                    <div class="bunny__body">
-                        <div class="bunny__arm bunny__arm--left"></div>
-                        <div class="bunny__arm bunny__arm--right"></div>
-                        <div class="bunny__tail"></div>
-                    </div>
-                </div><!-- /bunny -->
-
-                <!-- Ground renders in front of the bunny — masks its lower body during rise -->
-                <div class="ground"></div>
-
-                <!-- Grass tufts also render in front of the bunny -->
-
-                <div class="grass grass--1"><span></span><span></span><span></span></div>
-                <div class="grass grass--2"><span></span><span></span><span></span></div>
-                <div class="grass grass--3"><span></span><span></span><span></span></div>
-                <div class="grass grass--4"><span></span><span></span><span></span></div>
-                <div class="grass grass--5"><span></span><span></span><span></span></div>
-                <div class="grass grass--6"><span></span><span></span><span></span></div>
-                <div class="grass grass--7"><span></span><span></span><span></span></div>
-                <div class="grass grass--8"><span></span><span></span><span></span></div>
-                <div class="grass grass--9"><span></span><span></span><span></span></div>
-                <div class="grass grass--10"><span></span><span></span><span></span></div>
-                <div class="grass grass--11"><span></span><span></span><span></span></div>
-                <div class="grass grass--12"><span></span><span></span><span></span></div>
-                <div class="grass grass--13"><span></span><span></span><span></span></div>
-                <div class="grass grass--14"><span></span><span></span><span></span></div>
-                <div class="grass grass--15"><span></span><span></span><span></span></div>
-                <div class="grass grass--16"><span></span><span></span><span></span></div>
-                <div class="grass grass--17"><span></span><span></span><span></span></div>
-                <div class="grass grass--18"><span></span><span></span><span></span></div>
-                <div class="grass grass--19"><span></span><span></span><span></span></div>
-                <div class="grass grass--20"><span></span><span></span><span></span></div>
-
-                <!--
-                    Egg-scene renders in front of the bunny AND the grass (later in DOM).
-                    Crack divs are inside .egg__top-half (the visible upper half) so all
-                    8 cracks appear on the surface before the top flies off.
-                -->
-                <div class="egg-scene">
-                    <!-- Flat lying oval: fades out as the egg stands upright -->
-                    <div class="egg__lying"></div>
-                    <!-- Bottom shell: always clipped to lower half, no decorations needed -->
-                    <div class="egg"></div>
-                    <!-- Top half: all decoration + all crack lines live here -->
-                    <div class="egg__top-half">
-                        <div class="egg__stripe"></div>
-                        <div class="egg__dot egg__dot--1"></div>
-                        <div class="egg__dot egg__dot--2"></div>
-                        <div class="egg__dot egg__dot--3"></div>
-                        <div class="egg__crack egg__crack--1"></div>
-                        <div class="egg__crack egg__crack--2"></div>
-                        <div class="egg__crack egg__crack--3"></div>
-                        <div class="egg__crack egg__crack--4"></div>
-                        <div class="egg__crack egg__crack--5"></div>
-                        <div class="egg__crack egg__crack--6"></div>
-                        <div class="egg__crack egg__crack--7"></div>
-                        <div class="egg__crack egg__crack--8"></div>
-                    </div>
-                    <div class="egg-flash"></div>
-                </div>
-
-                <!-- Confetti: 20 pieces burst outward at 9.1s+ -->
-                <div class="confetti confetti--1"></div>
-                <div class="confetti confetti--2"></div>
-                <div class="confetti confetti--3"></div>
-                <div class="confetti confetti--4"></div>
-                <div class="confetti confetti--5"></div>
-                <div class="confetti confetti--6"></div>
-                <div class="confetti confetti--7"></div>
-                <div class="confetti confetti--8"></div>
-                <div class="confetti confetti--9"></div>
-                <div class="confetti confetti--10"></div>
-                <div class="confetti confetti--11"></div>
-                <div class="confetti confetti--12"></div>
-                <div class="confetti confetti--13"></div>
-                <div class="confetti confetti--14"></div>
-                <div class="confetti confetti--15"></div>
-                <div class="confetti confetti--16"></div>
-                <div class="confetti confetti--17"></div>
-                <div class="confetti confetti--18"></div>
-                <div class="confetti confetti--19"></div>
-                <div class="confetti confetti--20"></div>
-
-                <!-- Basket: pulled out at 13.7s -->
-                <div class="item item--basket">
-                    <div class="basket">
-                        <div class="basket__handle"></div>
-                        <div class="basket__body"></div>
-                    </div>
-                </div>
-
-                <!-- Flowers: pulled out at 16.5s -->
-                <div class="item item--flowers">
-                    <div class="flowers">
-                        <div class="flower">
-                            <div class="flower__stem"></div>
-                            <div class="flower__petal flower__petal--1"></div>
-                            <div class="flower__petal flower__petal--2"></div>
-                            <div class="flower__petal flower__petal--3"></div>
-                            <div class="flower__petal flower__petal--4"></div>
-                            <div class="flower__petal flower__petal--5"></div>
-                            <div class="flower__petal flower__petal--6"></div>
-                            <div class="flower__center"></div>
-                        </div>
-                        <div class="flower">
-                            <div class="flower__stem"></div>
-                            <div class="flower__petal flower__petal--1"></div>
-                            <div class="flower__petal flower__petal--2"></div>
-                            <div class="flower__petal flower__petal--3"></div>
-                            <div class="flower__petal flower__petal--4"></div>
-                            <div class="flower__petal flower__petal--5"></div>
-                            <div class="flower__petal flower__petal--6"></div>
-                            <div class="flower__center"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Small eggs: pulled out at 19.3s -->
-                <div class="item item--eggs">
-                    <div class="small-eggs">
-                        <div class="small-egg small-egg--1"></div>
-                        <div class="small-egg small-egg--2"></div>
-                        <div class="small-egg small-egg--3"></div>
-                    </div>
-                </div>
-
-                <!--
-                    Scroll: pulled out at 22s, unrolls at 23.5s, zooms to viewer at 26.5s.
-                    id attributes let PHP/JS inject the company message and link at serve time.
-                -->
-                <div class="scroll-container">
-                    <div class="scroll">
-                        <div class="scroll__roll"></div>
-                        <div class="scroll__paper">
-                            <p class="scroll__message" id="card-message">Happy Easter from your favourite company!</p>
-                            <a class="scroll__link" id="card-link" href="#">Visit us here</a>
-                        </div>
-                        <div class="scroll__roll"></div>
-                    </div>
-                </div>
-
+                <!-- Content injected dynamically by card.js -->
             </div>
 
             <!-- Screen-reader description of the full animation sequence -->
             <p class="sr-only">
-                An animated Easter card. A decorated egg rolls in from the left, grows larger, and begins to crack.
-                After shaking and cracking, the top of the egg flies off with a burst of colourful confetti.
-                An Easter Bunny climbs out of the broken shell and retrieves items: a wicker basket, a bunch of flowers,
-                and small Easter eggs. Finally, the bunny pulls out a scroll which unrolls to reveal a personalised message.
+                An animated Easter card. Depending on your choice, you will see either a playful bunny emerging from an egg, or a beautiful spring garden blooming in the sun. Both sequences end by revealing your personalised message on a scroll.
             </p>
         </section>
     </main>

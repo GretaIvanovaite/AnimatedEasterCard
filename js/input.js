@@ -169,7 +169,7 @@ function formSubmit(submitEvent) {
         }
     }
 
-    if (message === '') {
+    if (message === '' || message.length > 300) {
         const err = document.getElementById('message-error');
         err.hidden = false;
         document.getElementById('message').setAttribute('aria-invalid', 'true');
@@ -179,7 +179,7 @@ function formSubmit(submitEvent) {
         document.getElementById('message-error').hidden = true;
     }
 
-    if (companyName === '') {
+    if (companyName === '' || companyName.length > 60) {
         const err = document.getElementById('companyName-error');
         err.hidden = false;
         document.getElementById('companyName').setAttribute('aria-invalid', 'true');
@@ -190,7 +190,7 @@ function formSubmit(submitEvent) {
     }
 
     const emailSubject = document.getElementById('emailSubject').value.trim();
-    if (emailSubject === '') {
+    if (emailSubject === '' || emailSubject.length > 80) {
         const err = document.getElementById('emailSubject-error');
         err.hidden = false;
         document.getElementById('emailSubject').setAttribute('aria-invalid', 'true');

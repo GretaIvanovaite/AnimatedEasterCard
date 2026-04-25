@@ -32,9 +32,72 @@ header {
 }
 
 main {
-    width: min(640px, 92vw);
+    width: min(640px, 94vw);
     margin: var(--space-xl) auto;
     flex: 1;
+    padding: 0 var(--space-s);
+}
+
+/* ... keep other styles ... */
+
+@media (max-width: 600px) {
+    /* Layout: Stack elements vertically */
+    form > fieldset:last-child, 
+    .buttons,
+    .theme-options,
+    .reorder-list li {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    /* Reset width for mobile-friendly inputs */
+    select, 
+    input[type="file"],
+    .theme-option {
+        width: 100% !important;
+    }
+
+    .reorder-list li {
+        align-items: flex-start;
+        gap: var(--space-s);
+    }
+
+    .reorder-buttons {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    /* Buttons: Full width for touch targets */
+    button {
+        width: 100%;
+    }
+
+    form > fieldset:last-child p,
+    .buttons .help {
+        text-align: center;
+        margin-bottom: var(--space-s);
+    }
+
+    /* Shrink progress steps to fit screen */
+    nav li {
+        min-width: 4rem;
+    }
+
+    nav li span:first-child {
+        width: 1.75rem;
+        height: 1.75rem;
+        font-size: 0.75rem;
+    }
+
+    nav li span:last-child {
+        font-size: 0.65rem;
+    }
+
+    nav li:not(:last-child)::after {
+        top: 0.875rem;
+        left: calc(50% + 0.875rem);
+        width: calc(100% - 1.75rem);
+    }
 }
 
 footer {
@@ -252,6 +315,64 @@ main > section:last-of-type:not(:has(form)) article span {
     padding: 2px 8px;
     min-width: auto;
     font-size: 0.75rem;
+}
+
+/* Theme Selection Styles */
+.theme-options {
+    display: flex;
+    gap: var(--space-m);
+    margin-top: var(--space-s);
+}
+
+.theme-option {
+    flex: 1;
+    cursor: pointer;
+    margin: 0 !important;
+}
+
+/* Visually hide input but keep keyboard accessible */
+.theme-option input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.theme-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-m);
+    border: 2px solid var(--colour-card-border);
+    border-radius: var(--border-radius-md);
+    background: var(--colour-bg);
+    transition: all 0.2s ease;
+}
+
+.theme-option input:checked + .theme-card {
+    border-color: var(--colour-confirm-hover);
+    background: var(--colour-input);
+}
+
+.theme-option input:focus + .theme-card {
+    outline: 2px solid var(--colour-confirm-hover);
+    outline-offset: 2px;
+}
+
+.theme-card strong {
+    display: block;
+    font-size: 1rem;
+    color: var(--colour-text);
+}
+
+.theme-card small {
+    font-size: 0.75rem;
+    color: var(--colour-text-secondary);
+    margin-top: 4px;
 }
 
 /* Live Preview Styles */
